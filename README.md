@@ -39,7 +39,7 @@ Update-Database
 - Location Controller
 
 ## Database Diagram
-![DatabaseSchema](MonsterHunterDBSchema.jpg?raw=true "MonsterHunter")
+![DatabaseSchema](Resources\MonsterHunterDBSchema.jpg?raw=true "MonsterHunter")
 
 
 ### End Points
