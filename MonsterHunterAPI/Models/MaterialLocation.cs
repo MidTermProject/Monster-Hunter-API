@@ -10,10 +10,10 @@ namespace MonsterHunterAPI.Models
     public class MaterialLocation
     {
         [Key]
-        [ForeignKey("")]
+        [ForeignKey("Material")]
         public int MaterialID { get; set; }
         [Key]
-        [ForeignKey("")]
+        [ForeignKey("Location")]
         public int LocationID { get; set; }
         [Required]
         public string Action { get; set; }

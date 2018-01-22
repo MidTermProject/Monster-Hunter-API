@@ -11,10 +11,10 @@ namespace MonsterHunterAPI.Models
     {
         [Key]
         public int ID { get; set; }
-        [ForeignKey("ID")]
-        public int ?ParentID { get; set; }
-        [ForeignKey("ID")]
-        public int? ChildID { get; set; }
+        [ForeignKey("Blade")]
+        public int? ParentID { get; set; }
+        [Required]
+        public bool HasChild { get; set; }
         [Required]
         public string WeaponClass { get; set; }
         [Required]
@@ -39,6 +39,6 @@ namespace MonsterHunterAPI.Models
         public int Defense { get; set; }
         
         public List<Material> Materials { get; set; }
-
+        public List<Blade> ParentBlades { get; set; }
     }
 }
