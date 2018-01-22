@@ -1,0 +1,8 @@
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\bin\Debug\netcoreapp2.0\MonsterHunterAPI.deps.json
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\bin\Debug\netcoreapp2.0\MonsterHunterAPI.runtimeconfig.json
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\bin\Debug\netcoreapp2.0\MonsterHunterAPI.runtimeconfig.dev.json
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\bin\Debug\netcoreapp2.0\MonsterHunterAPI.dll
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\obj\Debug\netcoreapp2.0\MonsterHunterAPI.csprojResolveAssemblyReference.cache
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\obj\Debug\netcoreapp2.0\MonsterHunterAPI.csproj.CoreCompileInputs.cache
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\obj\Debug\netcoreapp2.0\MonsterHunterAPI.AssemblyInfoInputs.cache
+M:\OneDrive\Documents\Projects\Monster-Hunter-API\MonsterHunterAPI\obj\Debug\netcoreapp2.0\MonsterHunterAPI.AssemblyInfo.cs
