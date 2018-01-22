@@ -39,7 +39,7 @@ Update-Database
 - Location Controller
 
 ## Database Diagram
-![DatabaseSchema](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.jpg?raw=true "MonsterHunter")
+![DatabaseSchema](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.png?raw=true "MonsterHunter")
 
 ### End Points
 - TO BE IMPLEMENTED
