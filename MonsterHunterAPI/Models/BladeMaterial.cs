@@ -10,8 +10,8 @@ namespace MonsterHunterAPI.Models
     public class BladeMaterial
     {
         public int ID { get; set; }
-        public Blade BladeID { get; set; }
-        public Material MaterialID { get; set; }
+        public Blade Blade { get; set; }
+        public Material Material { get; set; }
         [Required]
         public int Quantity { get; set; }
     }

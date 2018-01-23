@@ -10,8 +10,8 @@ namespace MonsterHunterAPI.Models
     public class MaterialLocation
     {
         public int ID { get; set; }
-        public Material MaterialID { get; set; }
-        public Location LocationID { get; set; }
+        public Material Material { get; set; }
+        public Location Location { get; set; }
         [Required]
         public string Action { get; set; }
         [Required]

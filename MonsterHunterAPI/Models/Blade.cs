@@ -11,7 +11,7 @@ namespace MonsterHunterAPI.Models
     {
         public int ID { get; set; }
 
-        public Blade ParentID { get; set; }
+        public Blade Parent { get; set; }
         [Required]
         public bool HasChild { get; set; }
         [Required]
