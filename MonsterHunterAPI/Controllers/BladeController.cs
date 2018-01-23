@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MonsterHunterAPI.Models;
+using MonsterHunterAPI.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,18 +13,26 @@ namespace MonsterHunterAPI.Controllers
     [Route("api/[controller]")]
     public class BladeController : Controller
     {
+        private readonly HunterDbContext _context;
+
+        public BladeController(HunterDbContext context)
+        {
+            _context = context;
+        }
+        
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Blade> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _context.Blades;
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id:int}")]
+        public Blade Get(int id)
         {
-            return "value";
+            Blade blade = _context.Blades.FirstOrDefault(b => b.ID == id);
+            return blade;
         }
 
         // POST api/<controller>
