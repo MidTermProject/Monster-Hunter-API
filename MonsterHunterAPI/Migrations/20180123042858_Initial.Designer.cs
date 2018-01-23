@@ -11,8 +11,8 @@ using System;
 namespace MonsterHunterAPI.Migrations
 {
     [DbContext(typeof(HunterDbContext))]
-    [Migration("20180123025530_initial")]
-    partial class initial
+    [Migration("20180123042858_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,7 +47,8 @@ namespace MonsterHunterAPI.Migrations
 
                     b.Property<int>("RawDamage");
 
-                    b.Property<int>("Sharpness");
+                    b.Property<string>("Sharpness")
+                        .IsRequired();
 
                     b.Property<int>("Slots");
 

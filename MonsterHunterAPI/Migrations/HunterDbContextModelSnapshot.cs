@@ -46,7 +46,8 @@ namespace MonsterHunterAPI.Migrations
 
                     b.Property<int>("RawDamage");
 
-                    b.Property<int>("Sharpness");
+                    b.Property<string>("Sharpness")
+                        .IsRequired();
 
                     b.Property<int>("Slots");
 
