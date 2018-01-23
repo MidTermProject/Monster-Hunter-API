@@ -27,7 +27,7 @@ namespace MonsterHunterAPI.Models
 
         public int ElementDamage { get; set; }
         [Required]
-        public int Sharpness { get; set; }
+        public string Sharpness { get; set; }
         [Required]
         public int Rarity { get; set; }
         [Required]

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MonsterHunterAPI.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,7 +25,7 @@ namespace MonsterHunterAPI.Migrations
                     ParentID = table.Column<int>(nullable: true),
                     Rarity = table.Column<int>(nullable: false),
                     RawDamage = table.Column<int>(nullable: false),
-                    Sharpness = table.Column<int>(nullable: false),
+                    Sharpness = table.Column<string>(nullable: false),
                     Slots = table.Column<int>(nullable: false),
                     WeaponClass = table.Column<string>(nullable: false)
                 },
