@@ -9,7 +9,6 @@ namespace MonsterHunterAPI.Models
 {
     public class Material
     {
-        [Key]
         public int ID { get; set; }
         [Required]
         public string Name { get; set; }
@@ -17,8 +16,5 @@ namespace MonsterHunterAPI.Models
         public int Rarity { get; set; }
 
         public string Description { get; set; }
-        
-        public List<Location> Locations { get; set; }
-
     }
 }

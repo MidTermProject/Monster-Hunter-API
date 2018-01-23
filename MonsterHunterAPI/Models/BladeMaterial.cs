@@ -9,12 +9,9 @@ namespace MonsterHunterAPI.Models
 {
     public class BladeMaterial
     {
-        [Key]
-        [ForeignKey("Blade")]
-        public int BladeID { get; set; }
-        [Key]
-        [ForeignKey("Material")]
-        public int MaterialID { get; set; }
+        public int ID { get; set; }
+        public Blade Blade { get; set; }
+        public Material Material { get; set; }
         [Required]
         public int Quantity { get; set; }
     }
