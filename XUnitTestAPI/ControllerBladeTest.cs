@@ -22,7 +22,27 @@ namespace XUnitTestAPI
         {
             using (_context = new HunterDbContext(options))
             {
+                List<Material> testMaterials = GetTestMaterials();
+                foreach (Material x in testMaterials)
+                {
+                    _context.Materials.Add(x);
+                }
+                _context.SaveChangesAsync();
 
+                List<Blade> testBlades = GetTestBlades();
+                foreach (Blade x in testBlades)
+                {
+                    _context.Blades.Add(x);
+                }
+                _context.SaveChangesAsync();
+
+                // Arrange
+                BladeController controller = new BladeController(_context);
+                // Act
+                IEnumerable<Blade> result = controller.Get();
+                List<Blade> resultList = result.ToList();
+                // Assert
+                Assert.Equal(testBlades.Count, resultList.Count);
             }
         }
 
@@ -32,6 +52,7 @@ namespace XUnitTestAPI
             {
                 new Blade
                 {
+                    ID = 1,
                     Parent = null,
                     HasChild = true,
                     WeaponClass = "Long Sword",
@@ -46,10 +67,11 @@ namespace XUnitTestAPI
                     Slots = 0,
                     Defense = 0,
                     ImgUrl = null,
-                    Materials = {"Iron Ore:4"},
+                    Materials = new List<string> {"Iron Ore:4"}
                 },
                 new Blade
                 {
+                    ID = 2,
                     Parent = null,
                     HasChild = true,
                     WeaponClass = "Great Sword",
@@ -64,8 +86,8 @@ namespace XUnitTestAPI
                     Slots = 0,
                     Defense = 0,
                     ImgUrl = null,
-                    Materials = {"Iron Ore:4"},
-                },
+                    Materials = new List<string> {"Iron Ore:4"}
+                }
             };
 
             return testBlades;
@@ -77,6 +99,7 @@ namespace XUnitTestAPI
             {
                 new Material
                 {
+                    ID = 1,
                     Name = "Iron Ore",
                     Rarity = 4,
                     Description = "Its an ore... of iron...",
