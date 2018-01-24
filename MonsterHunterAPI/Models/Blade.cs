@@ -40,6 +40,6 @@ namespace MonsterHunterAPI.Models
         public string ImgUrl { get; set; }
 
         [NotMapped]
-        public List<Material> Materials { get; set; }
+        public List<string> Materials { get; set; }
     }
 }
