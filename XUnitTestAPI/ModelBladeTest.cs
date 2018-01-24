@@ -24,6 +24,10 @@ namespace XUnitTestAPI
 
         }
 
+        /////////////////
+        /// Get Tests ///
+        /////////////////
+
         [Fact]
         public void GetName()
         {
@@ -126,24 +130,7 @@ namespace XUnitTestAPI
         [Fact]
         public void GetParent()
         {
-            Blade parentblade = new Blade()
-            {
-                ID = 1,
-                WeaponClass = "Long Sword",
-                Name = "Stabbathy",
-                ImgUrl = "https://everyrecordtellsastory.files.wordpress.com/2014/04/toothpick-held-in-hand.jpg",
-                Description = "A sword literally only existing to become another sword.",
-                RawDamage = 8,
-                ElementType = "Awesome",
-                ElementDamage = 180,
-                Affinity = 1,
-                Rarity = 80,
-                Sharpness = "Green",
-                Slots = 3,
-                HasChild = true,
-                Defense = 8,
-                Materials = new List<string>()
-            };
+            Blade parentblade = new Blade();
 
             Blade testblade = new Blade()
             {
@@ -206,6 +193,203 @@ namespace XUnitTestAPI
             };
 
             Assert.False(testblade.HasChild);
+        }
+
+        /////////////////
+        /// Get Tests ///
+        /////////////////
+
+        [Fact]
+        public void SetName()
+        {
+            Blade testblade = new Blade()
+            {
+                Name = "Muramasa"
+            };
+            testblade.Name = "Musashi";
+
+            Assert.Matches("Musashi", testblade.Name);
+        }
+
+        [Fact]
+        public void SetId()
+        {
+            Blade testblade = new Blade()
+            {
+                ID = 2
+            };
+            testblade.ID = 4;
+
+            Assert.Equal(4, testblade.ID);
+        }
+
+        [Fact]
+        public void SetDmg()
+        {
+            Blade testblade = new Blade()
+            {
+                RawDamage = 10
+            };
+            testblade.RawDamage = 12;
+
+            Assert.Equal(12, testblade.RawDamage);
+        }
+
+        [Fact]
+        public void SetEleDmg()
+        {
+            Blade testblade = new Blade()
+            {
+                ElementDamage = 200
+            };
+            testblade.ElementDamage = 220;
+
+            Assert.Equal(220, testblade.ElementDamage);
+        }
+
+        [Fact]
+        public void SetAffinity()
+        {
+            Blade testblade = new Blade()
+            {
+                Affinity = 2
+            };
+            testblade.Affinity = 4;
+
+            Assert.Equal(4, testblade.Affinity);
+        }
+
+        [Fact]
+        public void SetRarity()
+        {
+            Blade testblade = new Blade()
+            {
+                Rarity = 100
+            };
+            testblade.Rarity = 10;
+
+            Assert.Equal(10, testblade.Rarity);
+        }
+
+        [Fact]
+        public void SetSlots()
+        {
+            Blade testblade = new Blade()
+            {
+                Slots = 4
+            };
+            testblade.Slots = 5;
+
+            Assert.Equal(5, testblade.Slots);
+        }
+
+        [Fact]
+        public void SetDef()
+        {
+            Blade testblade = new Blade()
+            {
+                Defense = 10
+            };
+            testblade.Defense = 12;
+
+            Assert.Equal(12, testblade.Defense);
+        }
+
+        [Fact]
+        public void SetClass()
+        {
+            Blade testblade = new Blade()
+            {
+                WeaponClass = "Long Sword"
+            };
+            testblade.WeaponClass = "Longer Sword";
+
+            Assert.Matches("Longer Sword", testblade.WeaponClass);
+        }
+
+        [Fact]
+        public void NullParent()
+        {
+            Blade parentblade = new Blade();
+
+            Blade testblade = new Blade()
+            {
+                Parent = parentblade
+            };
+            testblade.Parent = null;
+
+            Assert.Null(testblade.Parent);
+        }
+
+        [Fact]
+        public void SetParent()
+        {
+            Blade parentblade = new Blade();
+
+            Blade testblade = new Blade();
+            testblade.Parent = parentblade;
+
+            Assert.IsType<Blade>(testblade.Parent);
+        }
+
+        [Fact]
+        public void SetImg()
+        {
+            Blade testblade = new Blade()
+            {
+                ImgUrl = "https://everyrecordtellsastory.files.wordpress.com/2014/04/toothpick-held-in-hand.jpg"
+            };
+            testblade.ImgUrl = "~/img/hotdog.jpg";
+
+            Assert.Matches("~/img/hotdog.jpg", testblade.ImgUrl);
+        }
+
+        [Fact]
+        public void SetDesc()
+        {
+            Blade testblade = new Blade()
+            {
+                Description = "A totally rad sword built OP as all heck for testing purposes."
+            };
+            testblade.Description = "TODO: Insert description here.";
+
+            Assert.Matches("TODO: Insert description here.", testblade.Description);
+        }
+
+        [Fact]
+        public void SetElem()
+        {
+            Blade testblade = new Blade()
+            {
+                ElementType = "Awesome"
+            };
+            testblade.ElementType = "Toothpaste";
+
+            Assert.Matches("Toothpaste", testblade.ElementType);
+        }
+
+        [Fact]
+        public void SetSharp()
+        {
+            Blade testblade = new Blade()
+            {
+                Sharpness = "Green"
+            };
+            testblade.Sharpness = "Magenta";
+
+            Assert.Matches("Magenta", testblade.Sharpness);
+        }
+
+        [Fact]
+        public void SetHasChild()
+        {
+            Blade testblade = new Blade()
+            {
+                HasChild = false
+            };
+            testblade.HasChild = true;
+
+            Assert.True(testblade.HasChild);
         }
     }
 }
