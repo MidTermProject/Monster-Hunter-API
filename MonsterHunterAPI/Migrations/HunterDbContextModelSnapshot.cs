@@ -37,6 +37,8 @@ namespace MonsterHunterAPI.Migrations
 
                     b.Property<bool>("HasChild");
 
+                    b.Property<string>("ImgUrl");
+
                     b.Property<string>("Name")
                         .IsRequired();
 

@@ -21,6 +21,7 @@ namespace MonsterHunterAPI.Migrations
                     ElementDamage = table.Column<int>(nullable: false),
                     ElementType = table.Column<string>(nullable: true),
                     HasChild = table.Column<bool>(nullable: false),
+                    ImgUrl = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     ParentID = table.Column<int>(nullable: true),
                     Rarity = table.Column<int>(nullable: false),

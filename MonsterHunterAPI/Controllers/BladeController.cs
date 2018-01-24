@@ -19,7 +19,7 @@ namespace MonsterHunterAPI.Controllers
         {
             _context = context;
         }
-        
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<Blade> Get()
@@ -27,12 +27,55 @@ namespace MonsterHunterAPI.Controllers
             return _context.Blades;
         }
 
+
         // GET api/<controller>/5
         [HttpGet("{id:int}")]
-        public Blade Get(int id)
+        public OneBlade GetOneBlade(int id)
         {
-            Blade blade = _context.Blades.FirstOrDefault(b => b.ID == id);
-            return blade;
+            // Grab one Blade from the Blades table
+            OneBlade oneBlade = new OneBlade();
+            Blade blade = new Blade();
+
+            blade = _context.Blades.FirstOrDefault(b => b.ID == id);
+            oneBlade.ID = blade.ID;
+            oneBlade.Affinity = blade.Affinity;
+            oneBlade.Defense = blade.Defense;
+            oneBlade.Description = blade.Description;
+            oneBlade.ElementDamage = blade.ElementDamage;
+            oneBlade.ElementType = blade.ElementType;
+            oneBlade.HasChild = blade.HasChild;
+            oneBlade.Name = blade.Name;
+            oneBlade.Parent = blade.Parent;
+
+
+            List<BladeMaterial> bladeMaterials = new List<BladeMaterial>();
+            bladeMaterials = _context.BladesMaterials.Where(vm => vm.Blade.ID == id).ToList();
+            
+            BladeMaterial test = new BladeMaterial();
+
+            // Go through each of the tiems in the BladeMaterials
+            // Quiery the Materials Table
+            // convert all Materials from Materials Table to a list<Materials>
+            // set that list to oneBlade.Materials
+
+            var materials = _context.Materials;
+
+            foreach (var item in bladeMaterials)
+            {
+            }
+            string a = "";
+            //OneMaterial oneMaterial = new OneMaterial();
+            //List<OneMaterial> materials = new List<OneMaterial>();
+
+            //OneLocation oneLocation = new OneLocation();
+            //List<OneLocation> locations = new List<OneLocation>();
+            //locations = _context.Locations.Where(l => l.).ToList();
+
+
+
+            //OneBlade oneBlade = new OneBlade();
+            //oneBlade.Materials = materials;
+            return oneBlade;
         }
 
         // POST api/<controller>

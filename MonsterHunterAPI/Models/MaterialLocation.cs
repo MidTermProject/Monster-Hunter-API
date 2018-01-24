@@ -12,9 +12,7 @@ namespace MonsterHunterAPI.Models
         public int ID { get; set; }
         public Material Material { get; set; }
         public Location Location { get; set; }
-        [Required]
         public string Action { get; set; }
-        [Required]
         public int DropRate { get; set; }
     }
 }
