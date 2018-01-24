@@ -21,13 +21,13 @@ namespace MonsterHunterAPI.Controllers
             _context = context;
         }
 
-        // GET: api/<controller>
+        // GET: api/blade
         [HttpGet]
         public IEnumerable<Blade> Get() => _context.Blades;
 
-        // GET api/<controller>/{id}
+        // GET api/blade/blade/:id
         [HttpGet("{id:int}")]
-        public Blade GetBy(int id)
+        public Blade Blade(int id)
         {
             Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
             newBlade.Materials = new List<string>();
@@ -44,9 +44,9 @@ namespace MonsterHunterAPI.Controllers
             return newBlade;
         }
 
-        // GET api/<controller>/weaponClass?element=string&rarity=1
+        // GET api/blade/filterBy/:weaponClass/:element/:rarity
         [HttpGet("{weaponClass}/{element?}/{rarity:int?}")]
-        public List<Blade> GetBladeFilteredByType(string weaponClass, string element, int? rarity)
+        public List<Blade> FilterBy(string weaponClass, string element, int? rarity)
         {
             List<Blade> bladesToReturn = new List<Blade>();
             bladesToReturn = _context.Blades.ToList();
@@ -74,13 +74,18 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Post([FromBody]Blade value)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            // Look value.materials list
-            string mName = "";
-            string mQuantity = "";
+
+            BladeMaterial newBMrelation = new BladeMaterial(); ;
+
+            // Parsing materials and quantities as list of strings, to update BladeMaterial table
             foreach(string s in value.Materials)
             {
-                //s.
+                string[] values = s.Split(':');
+                Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
+                newBMrelation.MaterialID = relatedMaterial.ID;
+                newBMrelation.Quantity = Int32.Parse(values[1]);
             }
+
             await _context.Blades.AddAsync(value);
             await _context.SaveChangesAsync();
             return CreatedAtAction("Get", new { value.ID }, value);
