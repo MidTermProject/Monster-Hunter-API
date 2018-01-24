@@ -43,6 +43,9 @@ Update-Database
 
 # API Endpoints
 
+### API Deployed on Azure
+** http://monsterhunterapi.azurewebsites.net/ **
+
 ### Blades
 
 Getting all Blades from the Database
