@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MonsterHunterAPI.Models;
 using MonsterHunterAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,28 +23,33 @@ namespace MonsterHunterAPI.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<Blade> Get()
+        public IEnumerable<Blade> Get() => _context.Blades;
+
+        // GET api/<controller>/{id}
+        [HttpGet("{id:int}")]
+        public Blade GetBy(int id)
         {
-            return _context.Blades;
+            Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
+            newBlade.Materials = new List<string>();
+            List<BladeMaterial> newBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
+            foreach(var x in newBladeMaterials)
+            {
+                List<Material> materials = _context.Materials.Where(m => m.ID == x.MaterialID).ToList();
+                
+                foreach (var y in materials)
+                {
+                    newBlade.Materials.Add(y.Name + ":" + x.Quantity);
+                }
+            }
+            return newBlade;
         }
 
-
-        // GET api/<controller>/5
-        [HttpGet("{id:int}")]
-        public List<Blade> GetBladeFilteredBy(int id, string weaponClass, string element, int rarity)
+        // GET api/<controller>/weaponClass?element=string&rarity=1
+        [HttpGet("{weaponClass}/{element?}/{rarity:int?}")]
+        public List<Blade> GetBladeFilteredByType(string weaponClass, string element, int? rarity)
         {
-            // Grab one Blade from the Blades table
             List<Blade> bladesToReturn = new List<Blade>();
-            Blade blade = new Blade();
-
             bladesToReturn = _context.Blades.ToList();
-
-            if (id != 0)
-            {
-                blade = bladesToReturn.FirstOrDefault(b => b.ID == id);
-                bladesToReturn.Add(blade);
-                return bladesToReturn;
-            }
 
             if (!String.IsNullOrEmpty(weaponClass))
             {
@@ -55,7 +61,7 @@ namespace MonsterHunterAPI.Controllers
                 bladesToReturn = bladesToReturn.Where(b => b.ElementType == element).ToList();
             }
 
-            if (rarity != 0)
+            if (rarity.HasValue)
             {
                 bladesToReturn = bladesToReturn.Where(b => b.Rarity == rarity).ToList();
             }
@@ -63,17 +69,21 @@ namespace MonsterHunterAPI.Controllers
             return bladesToReturn;
         }
 
-
-        [HttpGet]
-        public void GetSwordsBy(string elemenet)
-        {
-            
-        }
-
-        // POST api/<controller>
+        // POST: api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Post([FromBody]Blade value)
         {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            // Look value.materials list
+            string mName = "";
+            string mQuantity = "";
+            foreach(string s in value.Materials)
+            {
+                //s.
+            }
+            await _context.Blades.AddAsync(value);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("Get", new { value.ID }, value);
         }
 
         // PUT api/<controller>/5
