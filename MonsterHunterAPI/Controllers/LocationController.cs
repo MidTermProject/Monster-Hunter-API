@@ -22,11 +22,11 @@ namespace MonsterHunterAPI.Controllers
 
         // GET: api/Location/locations/
         [HttpGet]
-        public IEnumerable<Location> Locations() => _context.Locations;
+        public IEnumerable<Location> Get() => _context.Locations;
 
         // GET api/Location/:locationId
-        [HttpGet("{id}")]
-        public Location GetLocation(int locationId) => _context.Locations.FirstOrDefault(l => l.ID == locationId);
+        [HttpGet("{locationId:int}")]
+        public Location Location(int locationId) => _context.Locations.FirstOrDefault(l => l.ID == locationId);
 
         // POST api/<controller>
         [HttpPost]
