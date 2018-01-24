@@ -37,6 +37,8 @@ namespace MonsterHunterAPI.Migrations
 
                     b.Property<bool>("HasChild");
 
+                    b.Property<string>("ImgUrl");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -118,8 +120,7 @@ namespace MonsterHunterAPI.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Action")
-                        .IsRequired();
+                    b.Property<string>("Action");
 
                     b.Property<int>("DropRate");
 

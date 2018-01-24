@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MonsterHunterAPI.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,7 @@ namespace MonsterHunterAPI.Migrations
                     ElementDamage = table.Column<int>(nullable: false),
                     ElementType = table.Column<string>(nullable: true),
                     HasChild = table.Column<bool>(nullable: false),
+                    ImgUrl = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     ParentID = table.Column<int>(nullable: true),
                     Rarity = table.Column<int>(nullable: false),
@@ -102,7 +103,7 @@ namespace MonsterHunterAPI.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Action = table.Column<string>(nullable: false),
+                    Action = table.Column<string>(nullable: true),
                     DropRate = table.Column<int>(nullable: false),
                     LocationID = table.Column<int>(nullable: true),
                     MaterialID = table.Column<int>(nullable: true)

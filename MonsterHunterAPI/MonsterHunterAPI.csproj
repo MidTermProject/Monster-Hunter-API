@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20180123041926_Initial.cs" />
-    <Compile Remove="Migrations\20180123041926_Initial.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Properties\PublishProfiles\MonsterHunterAPI - Web Deploy.pubxml" />
   </ItemGroup>
 

@@ -36,5 +36,10 @@ namespace MonsterHunterAPI.Models
         public int Slots { get; set; }
         [Required]
         public int Defense { get; set; }
+
+        public string ImgUrl { get; set; }
+
+        [NotMapped]
+        public List<string> Materials { get; set; }
     }
 }

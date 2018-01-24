@@ -19,7 +19,7 @@ namespace MonsterHunterAPI.Controllers
         {
             _context = context;
         }
-        
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<Blade> Get()
@@ -27,12 +27,47 @@ namespace MonsterHunterAPI.Controllers
             return _context.Blades;
         }
 
+
         // GET api/<controller>/5
         [HttpGet("{id:int}")]
-        public Blade Get(int id)
+        public List<Blade> GetBladeFilteredBy(int id, string weaponClass, string element, int rarity)
         {
-            Blade blade = _context.Blades.FirstOrDefault(b => b.ID == id);
-            return blade;
+            // Grab one Blade from the Blades table
+            List<Blade> bladesToReturn = new List<Blade>();
+            Blade blade = new Blade();
+
+            bladesToReturn = _context.Blades.ToList();
+
+            if (id != 0)
+            {
+                blade = bladesToReturn.FirstOrDefault(b => b.ID == id);
+                bladesToReturn.Add(blade);
+                return bladesToReturn;
+            }
+
+            if (!String.IsNullOrEmpty(weaponClass))
+            {
+                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass == weaponClass).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(element))
+            {
+                bladesToReturn = bladesToReturn.Where(b => b.ElementType == element).ToList();
+            }
+
+            if (rarity != 0)
+            {
+                bladesToReturn = bladesToReturn.Where(b => b.Rarity == rarity).ToList();
+            }
+
+            return bladesToReturn;
+        }
+
+
+        [HttpGet]
+        public void GetSwordsBy(string elemenet)
+        {
+            
         }
 
         // POST api/<controller>

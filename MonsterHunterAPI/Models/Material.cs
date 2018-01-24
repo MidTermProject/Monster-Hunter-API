@@ -14,7 +14,8 @@ namespace MonsterHunterAPI.Models
         public string Name { get; set; }
         [Required]
         public int Rarity { get; set; }
-
         public string Description { get; set; }
+        [NotMapped]
+        public int Quantity { get; set; }
     }
 }

@@ -14,5 +14,9 @@ namespace MonsterHunterAPI.Models
         public string Name { get; set; }
         [Required]
         public int Area { get; set; }
+        [NotMapped]
+        public int DropRate { get; set; }
+        [NotMapped]
+        public string Action { get; set; }
     }
 }
