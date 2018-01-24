@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonsterHunterAPI", "MonsterHunterAPI\MonsterHunterAPI.csproj", "{1BFE8D8F-7711-453A-89C9-AD94BB01735A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonsterHunterAPI", "MonsterHunterAPI\MonsterHunterAPI.csproj", "{1BFE8D8F-7711-453A-89C9-AD94BB01735A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestAPI", "XUnitTestAPI\XUnitTestAPI.csproj", "{5D4D1FC1-4284-4467-AA16-C5AA8618B5CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestAPI", "XUnitTestAPI\XUnitTestAPI.csproj", "{C2AD4130-667A-441A-BE97-DB58C09BB3ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{1BFE8D8F-7711-453A-89C9-AD94BB01735A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BFE8D8F-7711-453A-89C9-AD94BB01735A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BFE8D8F-7711-453A-89C9-AD94BB01735A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D4D1FC1-4284-4467-AA16-C5AA8618B5CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D4D1FC1-4284-4467-AA16-C5AA8618B5CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D4D1FC1-4284-4467-AA16-C5AA8618B5CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D4D1FC1-4284-4467-AA16-C5AA8618B5CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2AD4130-667A-441A-BE97-DB58C09BB3ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2AD4130-667A-441A-BE97-DB58C09BB3ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2AD4130-667A-441A-BE97-DB58C09BB3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2AD4130-667A-441A-BE97-DB58C09BB3ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
