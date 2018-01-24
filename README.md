@@ -17,7 +17,7 @@ Add-Migration Initial
 Update-Database
 ```
 
-## Default Connection String to Database
+## Default Connection String to Database if used Locally
 ```
 "ConnectionStrings": {
 
@@ -39,17 +39,28 @@ Update-Database
 - Location Controller
 
 ## Database Diagram
-![DatabaseSchema](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.png?raw=true "MonsterHunter")
+![DatabaseSchema](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.jpg?raw=true "MonsterHunter")
 
 # API Endpoints
-Getting all Blades from the Database
-`/api/blade/`
-Getting a single Blade by ID. This endpoint will return a list of materials in the returned Blade object
-`/api/blade/blade/:bladeId`
-Filtering list of blades by certain Blade type
-`/api/blade/filterBy/:weaponClass/:element/:rarity`
 
-### Baldes Example
+### API Deployed on Azure
+** http://monsterhunterapi.azurewebsites.net/ **
+
+### Blades
+
+Getting all Blades from the Database
+
+`/api/blade/`
+
+Getting a single Blade by ID. This endpoint will return a list of materials in the returned Blade object
+
+`/api/blade/:bladeId`
+
+Filtering list of blades by Weapon Or/And Element Or/And Rarity
+
+`/api/blade/:weaponClass/:element/:rarity`
+
+#### Example
 ```
 [
     {
@@ -93,13 +104,18 @@ Filtering list of blades by certain Blade type
 	}
 ]
 ```
+
+### Locations
+
 Getting All Locations from Database
+
 `api/location`
 
 Getting one Location by ID
+
 `/api/:locationId`
 
-### Locations Example
+#### Example
 ```
 [
     {
@@ -108,6 +124,13 @@ Getting one Location by ID
         "area": 5,
         "dropRate": 13,
         "action": "mining"
+    },
+	{
+        "id": 2,
+        "name": "The Hill",
+        "area": 12,
+        "dropRate": 4,
+        "action": "climbing"
     }
 ]
 ```
