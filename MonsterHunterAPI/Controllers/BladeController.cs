@@ -27,8 +27,9 @@ namespace MonsterHunterAPI.Controllers
 
         // GET api/blade/blade/:id
         [HttpGet("{id:int}")]
-        public Blade Blade(int id)
+        public List<Blade> Blade(int id)
         {
+            List<Blade> newBladeList = new List<Blade>();
             Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
             newBlade.Materials = new List<string>();
             List<BladeMaterial> newBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
@@ -41,7 +42,8 @@ namespace MonsterHunterAPI.Controllers
                     newBlade.Materials.Add(y.Name + ":" + x.Quantity);
                 }
             }
-            return newBlade;
+            newBladeList.Add(newBlade);
+            return newBladeList;
         }
 
         // GET api/blade/filterBy/:weaponClass/:element/:rarity
@@ -86,8 +88,10 @@ namespace MonsterHunterAPI.Controllers
                 newBMrelation.Quantity = Int32.Parse(values[1]);
             }
 
+            await _context.BladesMaterials.AddAsync(newBMrelation);
             await _context.Blades.AddAsync(value);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction("Get", new { value.ID }, value);
         }
 
