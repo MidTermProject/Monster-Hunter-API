@@ -30,52 +30,44 @@ namespace MonsterHunterAPI.Controllers
 
         // GET api/<controller>/5
         [HttpGet("{id:int}")]
-        public OneBlade GetOneBlade(int id)
+        public List<Blade> GetBladeFilteredBy(int id, string weaponClass, string element, int rarity)
         {
             // Grab one Blade from the Blades table
-            OneBlade oneBlade = new OneBlade();
+            List<Blade> bladesToReturn = new List<Blade>();
             Blade blade = new Blade();
 
-            blade = _context.Blades.FirstOrDefault(b => b.ID == id);
-            oneBlade.ID = blade.ID;
-            oneBlade.Affinity = blade.Affinity;
-            oneBlade.Defense = blade.Defense;
-            oneBlade.Description = blade.Description;
-            oneBlade.ElementDamage = blade.ElementDamage;
-            oneBlade.ElementType = blade.ElementType;
-            oneBlade.HasChild = blade.HasChild;
-            oneBlade.Name = blade.Name;
-            oneBlade.Parent = blade.Parent;
+            bladesToReturn = _context.Blades.ToList();
 
-
-            List<BladeMaterial> bladeMaterials = new List<BladeMaterial>();
-            bladeMaterials = _context.BladesMaterials.Where(vm => vm.Blade.ID == id).ToList();
-            
-            BladeMaterial test = new BladeMaterial();
-
-            // Go through each of the tiems in the BladeMaterials
-            // Quiery the Materials Table
-            // convert all Materials from Materials Table to a list<Materials>
-            // set that list to oneBlade.Materials
-
-            var materials = _context.Materials;
-
-            foreach (var item in bladeMaterials)
+            if (id != 0)
             {
+                blade = bladesToReturn.FirstOrDefault(b => b.ID == id);
+                bladesToReturn.Add(blade);
+                return bladesToReturn;
             }
-            string a = "";
-            //OneMaterial oneMaterial = new OneMaterial();
-            //List<OneMaterial> materials = new List<OneMaterial>();
 
-            //OneLocation oneLocation = new OneLocation();
-            //List<OneLocation> locations = new List<OneLocation>();
-            //locations = _context.Locations.Where(l => l.).ToList();
+            if (!String.IsNullOrEmpty(weaponClass))
+            {
+                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass == weaponClass).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(element))
+            {
+                bladesToReturn = bladesToReturn.Where(b => b.ElementType == element).ToList();
+            }
+
+            if (rarity != 0)
+            {
+                bladesToReturn = bladesToReturn.Where(b => b.Rarity == rarity).ToList();
+            }
+
+            return bladesToReturn;
+        }
 
 
-
-            //OneBlade oneBlade = new OneBlade();
-            //oneBlade.Materials = materials;
-            return oneBlade;
+        [HttpGet]
+        public void GetSwordsBy(string elemenet)
+        {
+            
         }
 
         // POST api/<controller>

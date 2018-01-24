@@ -11,8 +11,8 @@ using System;
 namespace MonsterHunterAPI.Migrations
 {
     [DbContext(typeof(HunterDbContext))]
-    [Migration("20180123233607_Initial")]
-    partial class Initial
+    [Migration("20180124004113_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -121,8 +121,7 @@ namespace MonsterHunterAPI.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Action")
-                        .IsRequired();
+                    b.Property<string>("Action");
 
                     b.Property<int>("DropRate");
 

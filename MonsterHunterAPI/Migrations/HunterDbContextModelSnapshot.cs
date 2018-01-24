@@ -120,8 +120,7 @@ namespace MonsterHunterAPI.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Action")
-                        .IsRequired();
+                    b.Property<string>("Action");
 
                     b.Property<int>("DropRate");
 
