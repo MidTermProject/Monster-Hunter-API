@@ -77,19 +77,25 @@ namespace MonsterHunterAPI.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            BladeMaterial newBMrelation = new BladeMaterial(); ;
+            await _context.Blades.AddAsync(value);
+            await _context.SaveChangesAsync();
 
             // Parsing materials and quantities as list of strings, to update BladeMaterial table
-            foreach(string s in value.Materials)
+            BladeMaterial newBMrelation = new BladeMaterial();
+            Blade newBlade = new Blade();
+            newBlade = _context.Blades.Last();
+            string[] values = new string[2];
+
+            foreach (string s in value.Materials)
             {
-                string[] values = s.Split(':');
+                values = s.Split(':');
                 Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
+                newBMrelation.Blade = newBlade;
                 newBMrelation.MaterialID = relatedMaterial.ID;
                 newBMrelation.Quantity = Int32.Parse(values[1]);
+                await _context.BladesMaterials.AddAsync(newBMrelation);
             }
 
-            await _context.BladesMaterials.AddAsync(newBMrelation);
-            await _context.Blades.AddAsync(value);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("Get", new { value.ID }, value);
