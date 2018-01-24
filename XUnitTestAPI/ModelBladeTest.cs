@@ -130,24 +130,7 @@ namespace XUnitTestAPI
         [Fact]
         public void GetParent()
         {
-            Blade parentblade = new Blade()
-            {
-                ID = 1,
-                WeaponClass = "Long Sword",
-                Name = "Stabbathy",
-                ImgUrl = "https://everyrecordtellsastory.files.wordpress.com/2014/04/toothpick-held-in-hand.jpg",
-                Description = "A sword literally only existing to become another sword.",
-                RawDamage = 8,
-                ElementType = "Awesome",
-                ElementDamage = 180,
-                Affinity = 1,
-                Rarity = 80,
-                Sharpness = "Green",
-                Slots = 3,
-                HasChild = true,
-                Defense = 8,
-                Materials = new List<string>()
-            };
+            Blade parentblade = new Blade();
 
             Blade testblade = new Blade()
             {
@@ -327,24 +310,7 @@ namespace XUnitTestAPI
         [Fact]
         public void NullParent()
         {
-            Blade parentblade = new Blade()
-            {
-                ID = 1,
-                WeaponClass = "Long Sword",
-                Name = "Stabbathy",
-                ImgUrl = "https://everyrecordtellsastory.files.wordpress.com/2014/04/toothpick-held-in-hand.jpg",
-                Description = "A sword literally only existing to become another sword.",
-                RawDamage = 8,
-                ElementType = "Awesome",
-                ElementDamage = 180,
-                Affinity = 1,
-                Rarity = 80,
-                Sharpness = "Green",
-                Slots = 3,
-                HasChild = true,
-                Defense = 8,
-                Materials = new List<string>()
-            };
+            Blade parentblade = new Blade();
 
             Blade testblade = new Blade()
             {
@@ -358,24 +324,7 @@ namespace XUnitTestAPI
         [Fact]
         public void SetParent()
         {
-            Blade parentblade = new Blade()
-            {
-                ID = 1,
-                WeaponClass = "Long Sword",
-                Name = "Stabbathy",
-                ImgUrl = "https://everyrecordtellsastory.files.wordpress.com/2014/04/toothpick-held-in-hand.jpg",
-                Description = "A sword literally only existing to become another sword.",
-                RawDamage = 8,
-                ElementType = "Awesome",
-                ElementDamage = 180,
-                Affinity = 1,
-                Rarity = 80,
-                Sharpness = "Green",
-                Slots = 3,
-                HasChild = true,
-                Defense = 8,
-                Materials = new List<string>()
-            };
+            Blade parentblade = new Blade();
 
             Blade testblade = new Blade();
             testblade.Parent = parentblade;
