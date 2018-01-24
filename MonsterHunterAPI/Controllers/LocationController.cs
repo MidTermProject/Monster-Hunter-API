@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MonsterHunterAPI.Data;
+using MonsterHunterAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,19 +13,20 @@ namespace MonsterHunterAPI.Controllers
     [Route("api/[controller]")]
     public class LocationController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly HunterDbContext _context;
+
+        public LocationController(HunterDbContext hunterDbContext)
         {
-            return new string[] { "value1", "value2" };
+            _context = hunterDbContext;
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        // GET: api/Location/locations/
+        [HttpGet]
+        public IEnumerable<Location> Get() => _context.Locations;
+
+        // GET api/Location/:locationId
+        [HttpGet("{locationId:int}")]
+        public Location Location(int locationId) => _context.Locations.FirstOrDefault(l => l.ID == locationId);
 
         // POST api/<controller>
         [HttpPost]

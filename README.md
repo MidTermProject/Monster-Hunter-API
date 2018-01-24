@@ -27,22 +27,90 @@ Update-Database
 4. Install Entity Framework, and build database with the following commands in the Package Manager Console:
 
 ### The main models/databases are:-
-- Blade Master Weapons
-- Weapon Material Relation
-- Crafting Material (representing materials of every weapon)
-- WeaponMaterialRelation
-- Locations
+- Blade
+- BladeMaterial (Intermediary DBSet)
+- Material
+- MaterialLocation (Intermediary DBSet)
+- Location
 
-### The main two controllers are:-
-- Weapon Controller
+### The main controllers are:-
+- Blade Controller
 - Material Controller
 - Location Controller
 
 ## Database Diagram
 ![DatabaseSchema](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.png?raw=true "MonsterHunter")
 
-### End Points
-- TO BE IMPLEMENTED
+# API Endpoints
+Getting all Blades from the Database
+`/api/blade/`
+Getting a single Blade by ID. This endpoint will return a list of materials in the returned Blade object
+`/api/blade/blade/:bladeId`
+Filtering list of blades by certain Blade type
+`/api/blade/filterBy/:weaponClass/:element/:rarity`
+
+### Baldes Example
+```
+[
+    {
+        "id": 1,
+        "parent": null,
+        "hasChild": true,
+        "weaponClass": "Long Sword",
+        "name": "Iron Katana 1",
+        "description": "A Long Sword forged with Eastern methods. Durable and resilient, but requires regular upkeep.",
+        "rawDamage": 70,
+        "elementType": null,
+        "elementDamage": 0,
+        "sharpness": "Yellow",
+        "rarity": 1,
+        "affinity": 0,
+        "slots": 0,
+        "defense": 0,
+        "imgUrl": null,
+        "materials": null
+    },
+    {
+        "id": 2,
+        "parent": {
+            "id": 1,
+            "parent": null,
+            "hasChild": true,
+            "weaponClass": "Long Sword",
+            "name": "Iron Katana 1",
+            "description": "A Long Sword forged with Eastern methods. Durable and resilient, but requires regular upkeep.",
+            "rawDamage": 70,
+            "elementType": null,
+            "elementDamage": 0,
+            "sharpness": "Yellow",
+            "rarity": 1,
+            "affinity": 0,
+            "slots": 0,
+            "defense": 0,
+            "imgUrl": null,
+            "materials": null
+        }
+	}
+]
+```
+Getting All Locations from Database
+`api/location`
+
+Getting one Location by ID
+`/api/:locationId`
+
+### Locations Example
+```
+[
+    {
+        "id": 1,
+        "name": "The Forrest",
+        "area": 5,
+        "dropRate": 13,
+        "action": "mining"
+    }
+]
+```
 
 ## Specs
 - C# ASP.NET Core MVC Application
