@@ -55,7 +55,7 @@ namespace MonsterHunterAPI.Controllers
 
             if (!String.IsNullOrEmpty(weaponClass))
             {
-                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass == weaponClass).ToList();
+                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass.ToLower() == weaponClass.ToLower()).ToList();
             }
 
             if (!String.IsNullOrEmpty(element))
@@ -76,7 +76,7 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Post([FromBody]Blade value)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            if (!(_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
+            if ((_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
             {
                 return BadRequest();
             }
