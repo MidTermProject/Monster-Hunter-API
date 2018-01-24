@@ -28,22 +28,62 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet("{locationId:int}")]
         public Location Location(int locationId) => _context.Locations.FirstOrDefault(l => l.ID == locationId);
 
-        // POST api/<controller>
+        // POST api/Location
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Post([FromBody]Location location)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_context.Locations.Any(l => l.Name == location.Name))
+            {
+                await _context.Locations.AddAsync(location);
+                await _context.SaveChangesAsync();
+            }
+
+            return CreatedAtAction("Location", location);
         }
 
-        // PUT api/<controller>/5
+        // PUT api/Location/:id/
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromBody]Location location)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            // Get location with Id
+            Location result = _context.Locations.FirstOrDefault(x => x.ID == id);
+
+            if (result != null)
+            {
+                result.Name = location.Name;
+                result.Area = location.Area;
+                result.DropRate = location.DropRate;
+                result.Action = location.Action;
+
+                _context.Update(result);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/Location/:id
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            // check if Id exists in database
+            if (!_context.Locations.Any(l => l.ID == id)) return BadRequest();
+
+            Location result = _context.Locations.FirstOrDefault(l => l.ID == id);
+
+            // check if result has a location
+            if (result == null) return BadRequest();
+
+            _context.Remove(result);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }

@@ -109,11 +109,23 @@ Filtering list of blades by Weapon Or/And Element Or/And Rarity
 
 Getting All Locations from Database
 
-`api/location`
+`/api/location`
 
 Getting one Location by ID
 
 `/api/:locationId`
+
+Creating a new Location
+
+`api/Location` A location object requires properties of `Name` and `Area`
+
+Update an existing Location
+
+`api/Location/:id` and the location object inclduing `name` and `area`
+
+Delete a location
+
+`api/Location/:id`
 
 #### Example
 ```
