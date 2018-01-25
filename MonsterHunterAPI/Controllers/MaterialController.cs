@@ -71,7 +71,7 @@ namespace MonsterHunterAPI.Controllers
             return listOfOneMaterial;
         }
 
-        // POST api/<controller>
+        // POST api/material
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Material material)
         {
@@ -114,10 +114,47 @@ namespace MonsterHunterAPI.Controllers
             return StatusCode(201);
         }
 
-        // PUT api/<controller>/5
+        // PUT api/material/:id
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromBody]Material material)
         {
+            if (!ModelState.IsValid) return BadRequest();
+
+            // if ID doesn't exist in materials table
+            if(!_context.Materials.Any(m => m.ID == id)) return StatusCode(409);
+            
+            // Update the Material with the new material
+            _context.Materials.Update(material);
+
+            // Remove prior rows from material location table to insert the new locations
+            List<MaterialLocation> oldMaterialLocations =
+                _context.MaterialsLocations.Where(ml => ml.Material.ID == id).ToList();
+
+            // Remove every old material location objects in the table
+            foreach (var ml in oldMaterialLocations)
+                _context.MaterialsLocations.Remove(ml);
+            
+            await _context.SaveChangesAsync();
+
+            // Get the current material requested
+            Material currentMaterial = await _context.Materials.FirstOrDefaultAsync(m => m.ID == id);
+
+            // for every location in that material create a new Material location object with necessary
+            // properties and add it to the database
+            foreach (var location in material.Locations)
+            {
+                Location relatedLocation = await _context.Locations.FirstOrDefaultAsync(l => l.ID == location.ID);
+                MaterialLocation newMaterialLocation = new MaterialLocation();
+                newMaterialLocation.LocationID = relatedLocation.ID;
+                newMaterialLocation.Material = currentMaterial;
+                newMaterialLocation.Action = location.Action;
+                newMaterialLocation.DropRate = location.DropRate;
+
+                await _context.MaterialsLocations.AddAsync(newMaterialLocation);
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         // DELETE api/<controller>/5
