@@ -124,7 +124,15 @@ namespace XUnitTestAPI
                 Material mat = new Material()
                 {
                     Name = "Unobtanium",
-                    Rarity = 1
+                    Rarity = 1,
+                    Description = "Derpadoo",
+                    Locations = new List<Location>
+                    {
+                        new Location {
+                            Name = "The Forrest",
+                            Area = 1
+                        }
+                    }
                 };
 
                 await controller.Post(mat);
