@@ -70,7 +70,7 @@ namespace MonsterHunterAPI.Controllers
             return bladesToReturn;
         }
 
-        // POST: api/<controller>
+        // POST: api/blade
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Blade value)
         {
@@ -110,7 +110,7 @@ namespace MonsterHunterAPI.Controllers
             return StatusCode(201);
         }
 
-        // PUT api/<controller>/5
+        // PUT api/blade/:id
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]Blade value)
         {
@@ -155,7 +155,7 @@ namespace MonsterHunterAPI.Controllers
             return Ok();
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/blade/:id
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

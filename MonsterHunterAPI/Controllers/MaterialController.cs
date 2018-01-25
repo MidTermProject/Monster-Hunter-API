@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -159,8 +159,27 @@ namespace MonsterHunterAPI.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            // If there is no Blade with an ID of [input]
+            if (!(await _context.Materials.AnyAsync(x => x.ID == id)))
+                return BadRequest();
+
+            List<MaterialLocation> matchedMatLocs = _context.MaterialsLocations.Where(current => current.Material.ID == id).ToList();
+
+            if (matchedMatLocs.Count > 0)
+            {
+                foreach (MaterialLocation matchMatLoc in matchedMatLocs)
+                {
+                    _context.MaterialsLocations.Remove(matchMatLoc);
+                }
+            }
+
+            Material materialToRemove = _context.Materials.FirstOrDefault(current => current.ID == id);
+            _context.Materials.Remove(materialToRemove);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
