@@ -160,7 +160,9 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             if (!(await _context.Blades.AnyAsync(b => b.ID == id)))
+            {
                 return BadRequest();
+            }
 
             // Remove entries in BladesMaterial for blade being deleted:
             // Check first if this blade has materials associated with it
@@ -169,12 +171,10 @@ namespace MonsterHunterAPI.Controllers
                 // for each name in Blade's material list, find ID in BladeMaterial table
                 List<BladeMaterial> BladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
                 // Remove every instance in BladeMaterial that is related to blade being deleted
-                if(BladeMaterials.Count > 0)
+                foreach (var x in BladeMaterials)
                 {
-                    foreach (var x in BladeMaterials)
-                        _context.BladesMaterials.Remove(x);
+                    _context.BladesMaterials.Remove(x);
                 }
-
                 await _context.SaveChangesAsync();
             }
 
