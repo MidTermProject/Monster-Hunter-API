@@ -77,10 +77,10 @@ namespace XUnitTestAPI
         {
             Location testlocation = new Location()
             {
-                Action = "Long Sword"
+                Action = "Mining"
             };
 
-            Assert.Matches("Long Sword", testlocation.Action);
+            Assert.Matches("Mining", testlocation.Action);
         }
 
         /////////////////
@@ -140,11 +140,11 @@ namespace XUnitTestAPI
         {
             Location testlocation = new Location()
             {
-                Action = "Long Sword"
+                Action = "Mining"
             };
-            testlocation.Action = "Longer Sword";
+            testlocation.Action = "Explosives";
 
-            Assert.Matches("Longer Sword", testlocation.Action);
+            Assert.Matches("Explosives", testlocation.Action);
         }
     }
 }
