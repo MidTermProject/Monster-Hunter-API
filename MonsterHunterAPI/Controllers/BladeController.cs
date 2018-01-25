@@ -25,48 +25,44 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet]
         public IEnumerable<Blade> Get() => _context.Blades;
 
-        // GET api/blade/blade/:id
+        // GET api/blade/:id
         [HttpGet("{id:int}")]
         public List<Blade> Blade(int id)
         {
             List<Blade> newBladeList = new List<Blade>();
+            if (!_context.Blades.Any(l => l.ID == id))
+                return newBladeList;
             Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
-            newBlade.Materials = new List<string>();
-            List<BladeMaterial> newBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
-            foreach(var x in newBladeMaterials)
+            if (newBlade != null)
             {
-                List<Material> materials = _context.Materials.Where(m => m.ID == x.MaterialID).ToList();
-                
-                foreach (var y in materials)
+                newBlade.Materials = new List<string>();
+                List<BladeMaterial> newBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
+                foreach (var x in newBladeMaterials)
                 {
-                    newBlade.Materials.Add(y.Name + ":" + x.Quantity);
+                    List<Material> materials = _context.Materials.Where(m => m.ID == x.MaterialID).ToList();
+
+                    foreach (var y in materials)
+                        newBlade.Materials.Add(y.Name + ":" + x.Quantity);
                 }
+                newBladeList.Add(newBlade);
             }
-            newBladeList.Add(newBlade);
             return newBladeList;
         }
 
-        // GET api/blade/filterBy/:weaponClass/:element/:rarity
+        // GET api/filterBy/:weaponClass/:element/:rarity
         [HttpGet("{weaponClass}/{element?}/{rarity:int?}")]
         public List<Blade> FilterBy(string weaponClass, string element, int? rarity)
         {
-            List<Blade> bladesToReturn = new List<Blade>();
-            bladesToReturn = _context.Blades.ToList();
+            List<Blade> bladesToReturn = _context.Blades.ToList();
 
             if (!String.IsNullOrEmpty(weaponClass))
-            {
-                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass.ToLower() == weaponClass.ToLower()).ToList();
-            }
+                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass == weaponClass).ToList();
 
             if (!String.IsNullOrEmpty(element))
-            {
                 bladesToReturn = bladesToReturn.Where(b => b.ElementType == element).ToList();
-            }
 
             if (rarity.HasValue)
-            {
                 bladesToReturn = bladesToReturn.Where(b => b.Rarity == rarity).ToList();
-            }
 
             return bladesToReturn;
         }
@@ -76,18 +72,13 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Post([FromBody]Blade value)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            if ((_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
-            {
-                return BadRequest();
-            }
 
             await _context.Blades.AddAsync(value);
             await _context.SaveChangesAsync();
 
             // Parsing materials and quantities as list of strings, to update BladeMaterial table
             BladeMaterial newBMrelation = new BladeMaterial();
-            Blade newBlade = new Blade();
-            newBlade = _context.Blades.Last();
+            Blade newBlade = _context.Blades.Last();
             string[] values = new string[2];
 
             foreach (string s in value.Materials)
@@ -95,20 +86,59 @@ namespace MonsterHunterAPI.Controllers
                 values = s.Split(':');
                 Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
                 newBMrelation.Blade = newBlade;
-                newBMrelation.MaterialID = relatedMaterial.ID;
+                if (relatedMaterial != null) newBMrelation.MaterialID = relatedMaterial.ID;
                 newBMrelation.Quantity = Int32.Parse(values[1]);
                 await _context.BladesMaterials.AddAsync(newBMrelation);
             }
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("Get", new { value.ID }, value);
+            return StatusCode(201);
         }
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromBody]Blade value)
         {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            if (!(_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
+            {
+                return BadRequest();
+            }
+
+            _context.Blades.Update(value);
+            // Remove prior entries in BladesMaterial for blade being updated:
+            // for each name in oldBlade's material list, find ID in BladeMaterial table
+            List<BladeMaterial> oldBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
+            foreach (var x in oldBladeMaterials)
+            {
+                _context.BladesMaterials.Remove(x);
+            }
+            await _context.SaveChangesAsync();
+            // Parse materials and quantities as list of strings, to update BladeMaterial table
+            // Get blade from table
+            Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
+            // Create new instance of blade material pairing
+            BladeMaterial newBMrelation = new BladeMaterial();
+            // used to store name and quantity for .Split in foreach loop
+            string[] values = new string[2];
+            // for each material:quantity string in blade's List<material> property...
+            foreach (string s in value.Materials)
+            {
+                values = s.Split(':');
+                // Get Material instance that matches name in current string in Blade's list of materials
+                Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
+                // Save Blade ID, Material ID, and Quantity to relation instance
+                newBMrelation = new BladeMaterial();
+                newBMrelation.Blade = newBlade;
+                newBMrelation.MaterialID = relatedMaterial.ID;
+                newBMrelation.Quantity = Int32.Parse(values[1]);
+                // add new row to BladeMaterial table
+                await _context.BladesMaterials.AddAsync(newBMrelation);
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         // DELETE api/<controller>/5
