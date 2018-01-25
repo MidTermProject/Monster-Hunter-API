@@ -19,12 +19,10 @@ namespace MonsterHunterAPI.Controllers
             _context = context;
         }
 
-        // GET ALL BLADES
         // GET: api/blade
         [HttpGet]
         public IEnumerable<Blade> Get() => _context.Blades;
 
-        //GET ONE BLADE BY ID
         // GET api/blade/:id
         [HttpGet("{id:int}")]
         public List<Blade> Blade(int id)
@@ -54,7 +52,6 @@ namespace MonsterHunterAPI.Controllers
             return newBladeList;
         }
 
-        // GET SEVERAL BLADES BY FILTERS
         // GET api/filterBy/:weaponClass/:element/:rarity
         [HttpGet("{weaponClass}/{element?}/{rarity:int?}")]
         public List<Blade> FilterBy(string weaponClass, string element, int? rarity)
@@ -73,8 +70,7 @@ namespace MonsterHunterAPI.Controllers
             return bladesToReturn;
         }
 
-        // POST A NEW BLADE
-        // POST: api/<controller>
+        // POST: api/blade
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Blade value)
         {
@@ -114,8 +110,7 @@ namespace MonsterHunterAPI.Controllers
             return StatusCode(201);
         }
 
-        // EDIT A BLADE BY ID
-        // PUT api/<controller>/5
+        // PUT api/blade/:id
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]Blade value)
         {
@@ -160,15 +155,12 @@ namespace MonsterHunterAPI.Controllers
             return Ok();
         }
 
-        // DELETE A BLADE BY ID
-        // DELETE api/<controller>/5
+        // DELETE api/blade/:id
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             if (!(await _context.Blades.AnyAsync(b => b.ID == id)))
-            {
                 return BadRequest();
-            }
 
             // Remove entries in BladesMaterial for blade being deleted:
             // Check first if this blade has materials associated with it
@@ -180,9 +172,7 @@ namespace MonsterHunterAPI.Controllers
                 if(BladeMaterials.Count > 0)
                 {
                     foreach (var x in BladeMaterials)
-                    {
                         _context.BladesMaterials.Remove(x);
-                    }
                 }
 
                 await _context.SaveChangesAsync();
