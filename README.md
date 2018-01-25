@@ -60,7 +60,7 @@ Filtering list of blades by Weapon Or/And Element Or/And Rarity
 
 `/api/blade/:weaponClass/:element/:rarity`
 
-#### Example
+#### Json-Fromatted Example
 ```
 [
     {
@@ -105,6 +105,47 @@ Filtering list of blades by Weapon Or/And Element Or/And Rarity
 ]
 ```
 
+### Materials
+
+Getting all materials from Database
+
+`GET: api/material`
+
+
+#### Json-Fromatted Example
+```
+[
+    {
+        "id": 1,
+        "name": "Iron Ore",
+        "rarity": 4,
+        "description": null,
+        "quantity": 0
+    },
+    {
+        "id": 2,
+        "name": "Earth Crystal",
+        "rarity": 4,
+        "description": null,
+        "quantity": 0
+    },
+    {
+        "id": 3,
+        "name": "Disc Stone",
+        "rarity": 4,
+        "description": null,
+        "quantity": 0
+    },
+    {
+        "id": 4,
+        "name": "Machalite Ore",
+        "rarity": 4,
+        "description": null,
+        "quantity": 0
+    }
+]
+```
+
 ### Locations
 
 Getting All Locations from Database
@@ -127,7 +168,7 @@ Delete a location
 
 `api/Location/:id`
 
-#### Example
+#### Json-Fromatted Example
 ```
 [
     {
