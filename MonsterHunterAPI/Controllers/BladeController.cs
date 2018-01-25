@@ -29,21 +29,26 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet("{id:int}")]
         public List<Blade> Blade(int id)
         {
+            // Web app expects a list of one item
             List<Blade> newBladeList = new List<Blade>();
+            // return empty list if blade doesn't exist
             if (!_context.Blades.Any(l => l.ID == id))
                 return newBladeList;
+
             Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
             if (newBlade != null)
             {
+                // Generate list of materials as string in format: "Name:Quantity"
                 newBlade.Materials = new List<string>();
+                // List of rows listing all materials for blade from BladeMaterials
                 List<BladeMaterial> newBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
                 foreach (var x in newBladeMaterials)
                 {
-                    List<Material> materials = _context.Materials.Where(m => m.ID == x.MaterialID).ToList();
-
-                    foreach (var y in materials)
-                        newBlade.Materials.Add(y.Name + ":" + x.Quantity);
+                    // Add material name and quantity from current material
+                    Material currentMaterial = _context.Materials.First(m => m.ID == x.MaterialID);
+                    newBlade.Materials.Add(currentMaterial.Name + ":" + x.Quantity);
                 }
+                
                 newBladeList.Add(newBlade);
             }
             return newBladeList;
@@ -72,6 +77,10 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Post([FromBody]Blade value)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
+            if ((_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
+            {
+                return StatusCode(409);
+            }
 
             // add new blade to table
             await _context.Blades.AddAsync(value);
@@ -108,7 +117,7 @@ namespace MonsterHunterAPI.Controllers
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
             if (!(_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
             {
-                return BadRequest();
+                return StatusCode(409);
             }
 
             _context.Blades.Update(value);
