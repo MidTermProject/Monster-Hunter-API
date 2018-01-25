@@ -44,8 +44,8 @@ namespace MonsterHunterAPI.Controllers
             Material material = _context.Materials.FirstOrDefault(m => m.ID == id);
 
             // Get all material locations objects - different locations for single material
-            List<MaterialLocation> materialLocations = _context.MaterialsLocations.Where(m => m.ID == material.ID).ToList();
-
+            List<MaterialLocation> materialLocations = _context.MaterialsLocations.Where(m => m.Material.ID == material.ID).ToList();
+            
             List<Location> locations = new List<Location>();
             foreach (var ml in materialLocations)
             {
@@ -71,17 +71,19 @@ namespace MonsterHunterAPI.Controllers
             return listOfOneMaterial;
         }
 
-        // POST api/<controller>
+        // POST api/material
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Material material)
         {
+            // checking if the Models state is invalid - Aka form is not in the right format
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            // Checking if the Material (by Name) already exists in the Database
+            if (_context.Materials.Any(m => m.Name == material.Name)) return StatusCode(409);
 
             // adding the material to generate the ID
             await _context.Materials.AddAsync(material);
             await _context.SaveChangesAsync();
-
-            MaterialLocation ml = new MaterialLocation();
 
             // Grabbing the last material added to use its ID for the ML table
             Material newMaterial = _context.Materials.Last();
@@ -89,22 +91,70 @@ namespace MonsterHunterAPI.Controllers
             // For every location the user sent, get its ID, DropRate, Action and save them into the MaterialLocations Table
             foreach (Location loc in material.Locations)
             {
-                ml.Material = newMaterial;
-                ml.DropRate = loc.DropRate;
-                ml.Action = loc.Action;
+                // Assigning the Material Location with necessary properties
+                MaterialLocation ml = new MaterialLocation
+                {
+                    Material = newMaterial,
+                    DropRate = loc.DropRate,
+                    Action = loc.Action
+                };
 
-                Location relatedLocation = _context.Locations.FirstOrDefault(x => x.Name == loc.Name);
+                // Getting related Location object with ID sent by User
+                Location relatedLocation = _context.Locations.FirstOrDefault(x => x.ID == loc.ID);
+
+                // Assigning the Material Location object with the ID of the related Location
                 if (relatedLocation != null) ml.LocationID = relatedLocation.ID;
+
+                // Adding the Material Location object to the context to be saved
                 await _context.MaterialsLocations.AddAsync(ml);
-                await _context.SaveChangesAsync();
             }
-            return CreatedAtAction("GetMaterialBy", material.ID);
+            await _context.SaveChangesAsync();
+
+            // return code 201 for creation completed
+            return StatusCode(201);
         }
 
-        // PUT api/<controller>/5
+        // PUT api/material/:id
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromBody]Material material)
         {
+            if (!ModelState.IsValid) return BadRequest();
+
+            // if ID doesn't exist in materials table
+            if(!_context.Materials.Any(m => m.ID == id)) return StatusCode(409);
+            
+            // Update the Material with the new material
+            _context.Materials.Update(material);
+
+            // Remove prior rows from material location table to insert the new locations
+            List<MaterialLocation> oldMaterialLocations =
+                _context.MaterialsLocations.Where(ml => ml.Material.ID == id).ToList();
+
+            // Remove every old material location objects in the table
+            foreach (var ml in oldMaterialLocations)
+                _context.MaterialsLocations.Remove(ml);
+            
+            await _context.SaveChangesAsync();
+
+            // Get the current material requested
+            Material currentMaterial = await _context.Materials.FirstOrDefaultAsync(m => m.ID == id);
+
+            // for every location in that material create a new Material location object with necessary
+            // properties and add it to the database
+            foreach (var location in material.Locations)
+            {
+                Location relatedLocation = await _context.Locations.FirstOrDefaultAsync(l => l.ID == location.ID);
+                MaterialLocation newMaterialLocation = new MaterialLocation();
+                newMaterialLocation.LocationID = relatedLocation.ID;
+                newMaterialLocation.Material = currentMaterial;
+                newMaterialLocation.Action = location.Action;
+                newMaterialLocation.DropRate = location.DropRate;
+
+                await _context.MaterialsLocations.AddAsync(newMaterialLocation);
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         // DELETE api/<controller>/5
