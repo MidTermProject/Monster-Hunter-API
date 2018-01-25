@@ -88,25 +88,28 @@ namespace MonsterHunterAPI.Controllers
             // Grabbing the last material added to use its ID for the ML table
             Material newMaterial = _context.Materials.Last();
 
-            // For every location the user sent, get its ID, DropRate, Action and save them into the MaterialLocations Table
-            foreach (Location loc in material.Locations)
+            if(material.Locations != null)
             {
-                // Assigning the Material Location with necessary properties
-                MaterialLocation ml = new MaterialLocation
+                // For every location the user sent, get its ID, DropRate, Action and save them into the MaterialLocations Table
+                foreach (Location loc in material.Locations)
                 {
-                    Material = newMaterial,
-                    DropRate = loc.DropRate,
-                    Action = loc.Action
-                };
+                    // Assigning the Material Location with necessary properties
+                    MaterialLocation ml = new MaterialLocation
+                    {
+                        Material = newMaterial,
+                        DropRate = loc.DropRate,
+                        Action = loc.Action
+                    };
 
-                // Getting related Location object with ID sent by User
-                Location relatedLocation = _context.Locations.FirstOrDefault(x => x.ID == loc.ID);
+                    // Getting related Location object with ID sent by User
+                    Location relatedLocation = _context.Locations.FirstOrDefault(x => x.ID == loc.ID);
 
-                // Assigning the Material Location object with the ID of the related Location
-                if (relatedLocation != null) ml.LocationID = relatedLocation.ID;
+                    // Assigning the Material Location object with the ID of the related Location
+                    if (relatedLocation != null) ml.LocationID = relatedLocation.ID;
 
-                // Adding the Material Location object to the context to be saved
-                await _context.MaterialsLocations.AddAsync(ml);
+                    // Adding the Material Location object to the context to be saved
+                    await _context.MaterialsLocations.AddAsync(ml);
+                }
             }
             await _context.SaveChangesAsync();
 
@@ -141,16 +144,19 @@ namespace MonsterHunterAPI.Controllers
 
             // for every location in that material create a new Material location object with necessary
             // properties and add it to the database
-            foreach (var location in material.Locations)
+            if(material.Locations != null)
             {
-                Location relatedLocation = await _context.Locations.FirstOrDefaultAsync(l => l.ID == location.ID);
-                MaterialLocation newMaterialLocation = new MaterialLocation();
-                newMaterialLocation.LocationID = relatedLocation.ID;
-                newMaterialLocation.Material = currentMaterial;
-                newMaterialLocation.Action = location.Action;
-                newMaterialLocation.DropRate = location.DropRate;
+                foreach (var location in material.Locations)
+                {
+                    Location relatedLocation = await _context.Locations.FirstOrDefaultAsync(l => l.ID == location.ID);
+                    MaterialLocation newMaterialLocation = new MaterialLocation();
+                    newMaterialLocation.LocationID = relatedLocation.ID;
+                    newMaterialLocation.Material = currentMaterial;
+                    newMaterialLocation.Action = location.Action;
+                    newMaterialLocation.DropRate = location.DropRate;
 
-                await _context.MaterialsLocations.AddAsync(newMaterialLocation);
+                    await _context.MaterialsLocations.AddAsync(newMaterialLocation);
+                }
             }
             await _context.SaveChangesAsync();
 
