@@ -7,8 +7,6 @@ using MonsterHunterAPI.Models;
 using MonsterHunterAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MonsterHunterAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -95,17 +93,19 @@ namespace MonsterHunterAPI.Controllers
             string[] values = new string[2];
             foreach (string s in value.Materials)
             {
-                // This property is actually of type Blade, not int, so can't just pass in the ID of the blade
-                newBMrelation.Blade = newBlade;
+                newBMrelation = new BladeMaterial
+                {
+                    // This property is actually of type Blade, not int, so can't just pass in the ID of the blade
+                    Blade = newBlade
+                };
                 values = s.Split(':');
                 // Finding ID of material based on its Name
                 Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
                 if (relatedMaterial != null) newBMrelation.MaterialID = relatedMaterial.ID;
                 newBMrelation.Quantity = Int32.Parse(values[1]);
                 await _context.BladesMaterials.AddAsync(newBMrelation);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
 
             return StatusCode(201);
         }

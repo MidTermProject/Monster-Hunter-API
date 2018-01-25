@@ -13,13 +13,14 @@ namespace XUnitTestAPI
 {
     public class ControllerBladeTest
     {
-        HunterDbContext _context;
-
-        DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
 
         [Fact]
         public void GetAllBlades()
         {
+            HunterDbContext _context;
+
+            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+
             using (_context = new HunterDbContext(options))
             {
                 List<Material> testMaterials = GetTestMaterials();
@@ -49,6 +50,10 @@ namespace XUnitTestAPI
         [Fact]
         public void GetOneBlade()
         {
+            HunterDbContext _context;
+
+            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+
             using (_context = new HunterDbContext(options))
             {
                 List<Material> testMaterials = GetTestMaterials();
@@ -78,6 +83,10 @@ namespace XUnitTestAPI
         [Fact]
         public void GetFilteredBlades()
         {
+            HunterDbContext _context;
+
+            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+
             using (_context = new HunterDbContext(options))
             {
                 List<Material> testMaterials = GetTestMaterials();
@@ -111,8 +120,12 @@ namespace XUnitTestAPI
         }
 
         [Fact]
-        public async Task CheckBladeMaterialRelation()
+        public async Task CheckBladeMaterialRelationAsync()
         {
+            HunterDbContext _context;
+
+            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+
             using (_context = new HunterDbContext(options))
             {
                 List<Material> testMaterials = GetTestMaterials();
@@ -131,9 +144,7 @@ namespace XUnitTestAPI
                 {
                     await controller.Post(x);
                 }
-                await _context.SaveChangesAsync();
-                //IEnumerable<Blade> result = controller.Blade(2);
-                //List<Blade> resultList = result.ToList();
+
                 Blade newBlade = new Blade();
                 newBlade = await _context.Blades.FirstAsync();
                 List<BladeMaterial> bladeMaterials = _context.BladesMaterials.Where(x => x.Blade.ID == newBlade.ID).ToList();
@@ -183,7 +194,7 @@ namespace XUnitTestAPI
                     Slots = 0,
                     Defense = 0,
                     ImgUrl = null,
-                    Materials = new List<string> {"Iron Ore:4", "Wood:6"}
+                    Materials = new List<string> {"Wood:6", "Iron Ore:4"}
                 }
             };
 
