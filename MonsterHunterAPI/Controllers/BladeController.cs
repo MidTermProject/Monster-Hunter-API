@@ -27,8 +27,9 @@ namespace MonsterHunterAPI.Controllers
 
         // GET api/blade/blade/:id
         [HttpGet("{id:int}")]
-        public Blade Blade(int id)
+        public List<Blade> Blade(int id)
         {
+            List<Blade> newBladeList = new List<Blade>();
             Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
             newBlade.Materials = new List<string>();
             List<BladeMaterial> newBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
@@ -41,7 +42,8 @@ namespace MonsterHunterAPI.Controllers
                     newBlade.Materials.Add(y.Name + ":" + x.Quantity);
                 }
             }
-            return newBlade;
+            newBladeList.Add(newBlade);
+            return newBladeList;
         }
 
         // GET api/blade/filterBy/:weaponClass/:element/:rarity
@@ -75,19 +77,27 @@ namespace MonsterHunterAPI.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
-            BladeMaterial newBMrelation = new BladeMaterial(); ;
-
-            // Parsing materials and quantities as list of strings, to update BladeMaterial table
-            foreach(string s in value.Materials)
-            {
-                string[] values = s.Split(':');
-                Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
-                newBMrelation.MaterialID = relatedMaterial.ID;
-                newBMrelation.Quantity = Int32.Parse(values[1]);
-            }
-
             await _context.Blades.AddAsync(value);
             await _context.SaveChangesAsync();
+
+            // Parsing materials and quantities as list of strings, to update BladeMaterial table
+            BladeMaterial newBMrelation = new BladeMaterial();
+            Blade newBlade = new Blade();
+            newBlade = _context.Blades.Last();
+            string[] values = new string[2];
+
+            foreach (string s in value.Materials)
+            {
+                values = s.Split(':');
+                Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
+                newBMrelation.Blade = newBlade;
+                newBMrelation.MaterialID = relatedMaterial.ID;
+                newBMrelation.Quantity = Int32.Parse(values[1]);
+                await _context.BladesMaterials.AddAsync(newBMrelation);
+            }
+
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction("Get", new { value.ID }, value);
         }
 
