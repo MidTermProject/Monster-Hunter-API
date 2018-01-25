@@ -53,13 +53,14 @@ namespace MonsterHunterAPI.Controllers
         }
 
         // GET api/filterBy/:weaponClass/:element/:rarity
-        [HttpGet("{weaponClass}/{element?}/{rarity:int?}")]
+        [HttpGet("{weaponClass?}/{element?}/{rarity:int?}")]
         public List<Blade> FilterBy(string weaponClass, string element, int? rarity)
         {
             List<Blade> bladesToReturn = _context.Blades.ToList();
-
-            if (!String.IsNullOrEmpty(weaponClass))
-                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass == weaponClass).ToList();
+            // Web App is sending up spaces replaced with plus symbols in API request. Need to convert back to space before checking blade table.
+            string classWithoutPluses = weaponClass.Replace('+', ' ');
+            if (!String.IsNullOrEmpty(classWithoutPluses))
+                bladesToReturn = bladesToReturn.Where(b => b.WeaponClass == classWithoutPluses).ToList();
 
             if (!String.IsNullOrEmpty(element))
                 bladesToReturn = bladesToReturn.Where(b => b.ElementType == element).ToList();
