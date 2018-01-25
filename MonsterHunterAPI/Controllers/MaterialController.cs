@@ -90,16 +90,19 @@ namespace MonsterHunterAPI.Controllers
             Material newMaterial = _context.Materials.Last();
 
             // For every location the user sent, get its ID, DropRate, Action and save them into the MaterialLocations Table
-            foreach (Location loc in material.Locations)
+            if (material.Locations.Count > 0)
             {
-                ml.Material = newMaterial;
-                ml.DropRate = loc.DropRate;
-                ml.Action = loc.Action;
+                foreach (Location loc in material.Locations)
+                {
+                    ml.Material = newMaterial;
+                    ml.DropRate = loc.DropRate;
+                    ml.Action = loc.Action;
 
-                Location relatedLocation = _context.Locations.FirstOrDefault(x => x.Name == loc.Name);
-                if (relatedLocation != null) ml.LocationID = relatedLocation.ID;
-                await _context.MaterialsLocations.AddAsync(ml);
-                await _context.SaveChangesAsync();
+                    Location relatedLocation = _context.Locations.FirstOrDefault(x => x.Name == loc.Name);
+                    if (relatedLocation != null) ml.LocationID = relatedLocation.ID;
+                    await _context.MaterialsLocations.AddAsync(ml);
+                    await _context.SaveChangesAsync();
+                }
             }
             return CreatedAtAction("GetMaterialBy", material.ID);
         }
@@ -124,9 +127,12 @@ namespace MonsterHunterAPI.Controllers
 
             List<MaterialLocation> matchedMatLocs = _context.MaterialsLocations.Where(current => current.Material.ID == id).ToList<MaterialLocation>();
 
-            foreach(MaterialLocation matchMatLoc in matchedMatLocs)
+            if (matchedMatLocs.Count > 0)
             {
-                _context.MaterialsLocations.Remove(matchMatLoc);
+                foreach (MaterialLocation matchMatLoc in matchedMatLocs)
+                {
+                    _context.MaterialsLocations.Remove(matchMatLoc);
+                }
             }
 
             Material materialToRemove = _context.Materials.FirstOrDefault(current => current.ID == id);

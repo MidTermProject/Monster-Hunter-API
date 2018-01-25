@@ -168,10 +168,14 @@ namespace MonsterHunterAPI.Controllers
                 // for each name in Blade's material list, find ID in BladeMaterial table
                 List<BladeMaterial> BladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
                 // Remove every instance in BladeMaterial that is related to blade being deleted
-                foreach (var x in BladeMaterials)
+                if(BladeMaterials.Count > 0)
                 {
-                    _context.BladesMaterials.Remove(x);
+                    foreach (var x in BladeMaterials)
+                    {
+                        _context.BladesMaterials.Remove(x);
+                    }
                 }
+
                 await _context.SaveChangesAsync();
             }
 

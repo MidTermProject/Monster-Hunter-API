@@ -58,7 +58,7 @@ namespace XUnitTestAPI
         }
 
         [Fact]
-        public async void TestPostAsync()
+        public async void TestPost()
         {
             using (HunterDbContext _context = new HunterDbContext(options))
             {
@@ -80,38 +80,38 @@ namespace XUnitTestAPI
             }
         }
 
-        //[Fact]
-        //public async void TestPut()
-        //{
-        //    using (HunterDbContext _context = new HunterDbContext(options))
-        //    {
+        [Fact]
+        public async void TestPut()
+        {
+            using (HunterDbContext _context = new HunterDbContext(options))
+            {
 
-        //        MaterialController controller = new MaterialController(_context);
+                MaterialController controller = new MaterialController(_context);
 
-        //        Material mat = new Material()
-        //        {
-        //            Name = "Unobtanium",
-        //            Rarity = 1
-        //        };
+                Material mat = new Material()
+                {
+                    Name = "Unobtanium",
+                    Rarity = 1
+                };
 
-        //        await controller.Post(mat);
+                await controller.Post(mat);
 
-        //        int MatId = controller.Get().FirstOrDefault<Material>(l => l.Name == "Unobtanium").ID;
+                int MatId = controller.Get().FirstOrDefault<Material>(l => l.Name == "Unobtanium").ID;
 
-        //        mat = new Material()
-        //        {
-        //            Name = "Vibranium",
-        //            Rarity = 1
-        //        };
+                mat = new Material()
+                {
+                    Name = "Vibranium",
+                    Rarity = 1
+                };
 
-        //        await controller.Put(MatId, mat);
+                await controller.Put(MatId, mat);
 
-        //        Material material = controller.GetMaterialBy(MatId)[0];
+                Material material = controller.GetMaterialBy(MatId)[0];
 
-        //        Assert.Equal("Vibranium", material.Name);
+                Assert.Equal("Vibranium", material.Name);
 
-        //    }
-        //}
+            }
+        }
 
         [Fact]
         public async void TestDeleteAsync()
