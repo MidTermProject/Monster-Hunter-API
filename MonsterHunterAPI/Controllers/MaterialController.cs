@@ -75,13 +75,15 @@ namespace MonsterHunterAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Material material)
         {
+            // checking if the Models state is invalid - Aka form is not in the right format
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            // Checking if the Material (by Name) already exists in the Database
+            if (_context.Materials.Any(m => m.Name == material.Name)) return StatusCode(409);
 
             // adding the material to generate the ID
             await _context.Materials.AddAsync(material);
             await _context.SaveChangesAsync();
-
-            MaterialLocation ml = new MaterialLocation();
 
             // Grabbing the last material added to use its ID for the ML table
             Material newMaterial = _context.Materials.Last();
@@ -89,16 +91,27 @@ namespace MonsterHunterAPI.Controllers
             // For every location the user sent, get its ID, DropRate, Action and save them into the MaterialLocations Table
             foreach (Location loc in material.Locations)
             {
-                ml.Material = newMaterial;
-                ml.DropRate = loc.DropRate;
-                ml.Action = loc.Action;
+                // Assigning the Material Location with necessary properties
+                MaterialLocation ml = new MaterialLocation
+                {
+                    Material = newMaterial,
+                    DropRate = loc.DropRate,
+                    Action = loc.Action
+                };
 
-                Location relatedLocation = _context.Locations.FirstOrDefault(x => x.Name == loc.Name);
+                // Getting related Location object with ID sent by User
+                Location relatedLocation = _context.Locations.FirstOrDefault(x => x.ID == loc.ID);
+
+                // Assigning the Material Location object with the ID of the related Location
                 if (relatedLocation != null) ml.LocationID = relatedLocation.ID;
+
+                // Adding the Material Location object to the context to be saved
                 await _context.MaterialsLocations.AddAsync(ml);
-                await _context.SaveChangesAsync();
             }
-            return CreatedAtAction("GetMaterialBy", material.ID);
+            await _context.SaveChangesAsync();
+
+            // return code 201 for creation completed
+            return StatusCode(201);
         }
 
         // PUT api/<controller>/5
