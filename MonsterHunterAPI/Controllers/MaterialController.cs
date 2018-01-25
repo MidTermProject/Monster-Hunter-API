@@ -44,8 +44,8 @@ namespace MonsterHunterAPI.Controllers
             Material material = _context.Materials.FirstOrDefault(m => m.ID == id);
 
             // Get all material locations objects - different locations for single material
-            List<MaterialLocation> materialLocations = _context.MaterialsLocations.Where(m => m.ID == material.ID).ToList();
-
+            List<MaterialLocation> materialLocations = _context.MaterialsLocations.Where(m => m.Material.ID == material.ID).ToList();
+            
             List<Location> locations = new List<Location>();
             foreach (var ml in materialLocations)
             {
