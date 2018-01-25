@@ -28,7 +28,7 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet]
         public IEnumerable<Material> Get() => _context.Materials; // Return all materials
 
-        // GET api/:id
+        // GET api/material/:id
         [HttpGet("{id:int}")]
         public List<Material> GetMaterialBy(int id)
         {

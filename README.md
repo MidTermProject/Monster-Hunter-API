@@ -109,7 +109,15 @@ Filtering list of blades by Weapon Or/And Element Or/And Rarity
 
 Getting all materials from Database
 
-`GET: api/material`
+`GET /api/material`
+
+Getting one material by ID
+
+`GET /api/material/:id`
+
+Posting a material with a list of locations
+
+`POST /api/material`
 
 
 #### Json-Fromatted Example
@@ -120,7 +128,7 @@ Getting all materials from Database
         "name": "Iron Ore",
         "rarity": 4,
         "description": null,
-        "quantity": 0
+        "quantity": 0,
     },
     {
         "id": 2,
