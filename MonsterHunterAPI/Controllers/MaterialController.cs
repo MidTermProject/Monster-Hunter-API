@@ -24,10 +24,12 @@ namespace MonsterHunterAPI.Controllers
             _context = context;
         }
 
+        // GET ALL MATERIALS
         // GET: api/material
         [HttpGet]
         public IEnumerable<Material> Get() => _context.Materials; // Return all materials
 
+        // GET One MATERIAL BY ID
         // GET api/material/:id
         [HttpGet("{id:int}")]
         public List<Material> GetMaterialBy(int id)
@@ -71,6 +73,7 @@ namespace MonsterHunterAPI.Controllers
             return listOfOneMaterial;
         }
 
+        // POST ONE NEW MATERIAL
         // POST api/<controller>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Material material)
@@ -101,16 +104,37 @@ namespace MonsterHunterAPI.Controllers
             return CreatedAtAction("GetMaterialBy", material.ID);
         }
 
+        // EDIT ONE MATERIAL BY ID
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
+        // DELETE ONE MATERIAL
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            // If there is no Blade with an ID of [input]
+            if (!(await _context.Materials.AnyAsync(currentMaterial => currentMaterial.ID == id)))
+            {
+                return BadRequest();
+            }
+
+            List<MaterialLocation> matchedMatLocs = _context.MaterialsLocations.Where(current => current.Material.ID == id).ToList<MaterialLocation>();
+
+            foreach(MaterialLocation matchMatLoc in matchedMatLocs)
+            {
+                _context.MaterialsLocations.Remove(matchMatLoc);
+            }
+
+            Material materialToRemove = _context.Materials.FirstOrDefault(current => current.ID == id);
+            _context.Materials.Remove(materialToRemove);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+
         }
     }
 }

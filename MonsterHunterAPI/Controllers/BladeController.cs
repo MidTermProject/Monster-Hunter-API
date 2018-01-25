@@ -21,10 +21,12 @@ namespace MonsterHunterAPI.Controllers
             _context = context;
         }
 
+        // GET ALL BLADES
         // GET: api/blade
         [HttpGet]
         public IEnumerable<Blade> Get() => _context.Blades;
 
+        //GET ONE BLADE BY ID
         // GET api/blade/:id
         [HttpGet("{id:int}")]
         public List<Blade> Blade(int id)
@@ -49,6 +51,7 @@ namespace MonsterHunterAPI.Controllers
             return newBladeList;
         }
 
+        // GET SEVERAL BLADES BY FILTERS
         // GET api/filterBy/:weaponClass/:element/:rarity
         [HttpGet("{weaponClass}/{element?}/{rarity:int?}")]
         public List<Blade> FilterBy(string weaponClass, string element, int? rarity)
@@ -67,6 +70,7 @@ namespace MonsterHunterAPI.Controllers
             return bladesToReturn;
         }
 
+        // POST A NEW BLADE
         // POST: api/<controller>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Blade value)
@@ -101,6 +105,7 @@ namespace MonsterHunterAPI.Controllers
             return StatusCode(201);
         }
 
+        // EDIT A BLADE BY ID
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]Blade value)
@@ -146,6 +151,7 @@ namespace MonsterHunterAPI.Controllers
             return Ok();
         }
 
+        // DELETE A BLADE BY ID
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
