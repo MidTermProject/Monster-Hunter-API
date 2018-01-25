@@ -37,23 +37,24 @@ namespace XUnitTestAPI
         {
             using (HunterDbContext _context = new HunterDbContext(options))
             {
-
                 MaterialController controller = new MaterialController(_context);
 
                 Material mat = new Material()
                 {
+                    ID = 1,
                     Name = "Unobtanium",
                     Rarity = 1
                 };
 
-                await controller.Post(mat);
+                _context.Materials.Add(mat);
+                await _context.SaveChangesAsync();
 
-                int MatId = controller.Get().FirstOrDefault<Material>(l => l.Name == "Unobtanium").ID;
+                Material newMat = await _context.Materials.FirstOrDefaultAsync(x => x.Name == "Unobtanium");
+                int MatId = newMat.ID;
 
                 Material material = controller.GetMaterialBy(MatId)[0];
 
                 Assert.Equal("Unobtanium", material.Name);
-
             }
         }
 

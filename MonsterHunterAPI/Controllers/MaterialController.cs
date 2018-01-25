@@ -37,7 +37,7 @@ namespace MonsterHunterAPI.Controllers
             List<Material> listOfOneMaterial = new List<Material>();
 
             // check if Id exists in the Database
-            if (!_context.Locations.Any(l => l.ID == id))
+            if (!_context.Materials.Any(l => l.ID == id))
                 return listOfOneMaterial;
 
             // Get material by specified ID
