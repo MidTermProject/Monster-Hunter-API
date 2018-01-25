@@ -33,9 +33,7 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Post([FromBody]Location location)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             if (!_context.Locations.Any(l => l.Name == location.Name))
             {
