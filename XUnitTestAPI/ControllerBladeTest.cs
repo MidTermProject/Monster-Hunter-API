@@ -166,7 +166,7 @@ namespace XUnitTestAPI
                     ImgUrl = null,
                     Materials = new List<string> {"Iron Ore:4", "Wood:2"}
                 },
-                // new Blade
+                new Blade
                 {
                     ID = 2,
                     Parent = null,

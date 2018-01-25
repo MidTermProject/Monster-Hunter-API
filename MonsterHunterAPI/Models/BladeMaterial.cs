@@ -11,10 +11,9 @@ namespace MonsterHunterAPI.Models
     {
         public int ID { get; set; }
         public virtual Blade Blade { get; set; }
+        public int MaterialID { get; set; }
+        public virtual Material Material { get; set; }
         [Required]
         public int Quantity { get; set; }
-        public virtual Material Material { get; set; }
-        [NotMapped]
-        public int MaterialID { get; set; }
     }
 }

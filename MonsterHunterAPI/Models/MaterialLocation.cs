@@ -14,7 +14,6 @@ namespace MonsterHunterAPI.Models
         public string Action { get; set; }
         public int DropRate { get; set; }
         public virtual Location Location { get; set; }
-        [NotMapped]
         public int LocationID { get; set; }
     }
 }

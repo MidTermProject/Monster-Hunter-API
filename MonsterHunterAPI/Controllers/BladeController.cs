@@ -73,19 +73,24 @@ namespace MonsterHunterAPI.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
+            // add new blade to table
             await _context.Blades.AddAsync(value);
             await _context.SaveChangesAsync();
 
-            // Parsing materials and quantities as list of strings, to update BladeMaterial table
+            // Prep to populate BladeMaterial relation:
+            // New blade was added to table, need to retrieve to get the ID of it to use in BladeMaterial relation.
             BladeMaterial newBMrelation = new BladeMaterial();
             Blade newBlade = _context.Blades.Last();
-            string[] values = new string[2];
 
+            // Parsing materials and quantities from passed in Blade as array of 2 strings, to update BladeMaterial table
+            string[] values = new string[2];
             foreach (string s in value.Materials)
             {
-                values = s.Split(':');
-                Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
+                // This property is actually of type Blade, not int, so can't just pass in the ID of the blade
                 newBMrelation.Blade = newBlade;
+                values = s.Split(':');
+                // Finding ID of material based on its Name
+                Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
                 if (relatedMaterial != null) newBMrelation.MaterialID = relatedMaterial.ID;
                 newBMrelation.Quantity = Int32.Parse(values[1]);
                 await _context.BladesMaterials.AddAsync(newBMrelation);
@@ -143,8 +148,33 @@ namespace MonsterHunterAPI.Controllers
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            if (!(await _context.Blades.AnyAsync(b => b.ID == id)))
+            {
+                return BadRequest();
+            }
+
+            // Remove entries in BladesMaterial for blade being deleted:
+            // Check first if this blade has materials associated with it
+            if (await _context.BladesMaterials.AnyAsync(z => z.Blade.ID == id))
+            {
+                // for each name in Blade's material list, find ID in BladeMaterial table
+                List<BladeMaterial> BladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
+                // Remove every instance in BladeMaterial that is related to blade being deleted
+                foreach (var x in BladeMaterials)
+                {
+                    _context.BladesMaterials.Remove(x);
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            // Get blade from table and remove
+            Blade bladeToDelete = await _context.Blades.FirstAsync(b => b.ID == id);
+            _context.Blades.Remove(bladeToDelete);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
