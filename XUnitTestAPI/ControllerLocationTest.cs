@@ -11,71 +11,136 @@ namespace XUnitTestAPI
 {
     public class ControllerLocationTest
     {
-        HunterDbContext _context;
+        DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>()
 
-        public ControllerLocationTest()
-        {
-            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
 
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-
-                .Options;
-
-            _context = new HunterDbContext(options);
-
-        }
-
-        /////////////////
-        /// Get Tests ///
-        /////////////////
+            .Options;
 
         [Fact]
         public void TestGet()
         {
+            using (HunterDbContext _context = new HunterDbContext(options))
+            {
 
-            LocationController controller = new LocationController(_context);
+                LocationController controller = new LocationController(_context);
 
-            int tableCount = controller.Get().Count();
+                int tableCount = controller.Get().Count();
 
-            Assert.Equal(0, tableCount);
+                Assert.Equal(0, tableCount);
+
+            }
         }
 
         [Fact]
-        public async void TestLocation()
+        public async void TestLocationAsync()
         {
-
-            LocationController controller = new LocationController(_context);
-
-            Location loc = new Location()
+            using (HunterDbContext _context = new HunterDbContext(options))
             {
-                Name = "The Forrest",
-                Area = 1
-            };
+               
+                LocationController controller = new LocationController(_context);
 
-            await controller.Post(loc);
+                Location loc = new Location()
+                {
+                    Name = "The Forrest",
+                    Area = 1
+                };
 
-            Location location = controller.Location(1);
+                await controller.Post(loc);
 
-            Assert.Equal("The Forrest",location.Name);
+               // int LocId = controller.Get().FirstOrDefault<Location>(l => l.Name == "The Forrest").ID;
+
+
+                Location location = controller.Location(1);
+
+                Assert.Equal("The Forrest", location.Name);
+
+            }
         }
 
         [Fact]
         public async void TestPostAsync()
         {
-
-            LocationController controller = new LocationController(_context);
-
-            Location loc = new Location()
+            using (HunterDbContext _context = new HunterDbContext(options))
             {
-                Name = "The Forrest",
-                Area = 1
-            };
-            
-            await controller.Post(loc);
 
-            int tableCount = controller.Get().Count();
+                LocationController controller = new LocationController(_context);
 
-            Assert.Equal(1,tableCount);
+                Location loc = new Location()
+                {
+                    Name = "The Forrest",
+                    Area = 1
+                };
+
+                await controller.Post(loc);
+
+                int tableCount = controller.Get().Count();
+
+                Assert.Equal(1, tableCount);
+
+            }
+        }
+
+        [Fact]
+        public async void TestPut()
+        {
+            using (HunterDbContext _context = new HunterDbContext(options))
+            {
+
+                LocationController controller = new LocationController(_context);
+
+                Location loc = new Location()
+                {
+                    Name = "The Forrest",
+                    Area = 1
+                };
+
+                await controller.Post(loc);
+
+                int LocId = controller.Get().FirstOrDefault<Location>(l => l.Name == "The Forrest").ID;
+
+                loc = new Location()
+                {
+                    Name = "The Forest",
+                    Area = 1
+                };
+
+                await controller.Put(LocId, loc);
+
+                Location location = controller.Location(LocId);
+
+                Assert.Equal("The Forest", location.Name);
+
+            }
+        }
+
+        [Fact]
+        public async void TestDeleteAsync()
+        {
+            using (HunterDbContext _context = new HunterDbContext(options))
+            {
+
+                LocationController controller = new LocationController(_context);
+
+                Location loc = new Location()
+                {
+                    Name = "The Forrest",
+                    Area = 1
+                };
+
+                await controller.Post(loc);
+
+                int tableCount1 = controller.Get().Count();
+
+                int LocId = controller.Get().FirstOrDefault<Location>(l => l.Name == "The Forrest").ID;
+
+                await controller.Delete(LocId);
+
+                int tableCount2 = controller.Get().Count();
+
+                Assert.Equal(1, tableCount1 - tableCount2);
+
+            }
         }
     }
 }
