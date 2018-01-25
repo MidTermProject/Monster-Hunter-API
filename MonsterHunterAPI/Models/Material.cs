@@ -17,5 +17,7 @@ namespace MonsterHunterAPI.Models
         public string Description { get; set; }
         [NotMapped]
         public int Quantity { get; set; }
+        [NotMapped]
+        public List<Location> Locations { get; set; }
     }
 }
