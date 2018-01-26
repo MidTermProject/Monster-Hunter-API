@@ -215,13 +215,13 @@ namespace XUnitTestAPI
 
                 Blade alteredBlade = controller.Get().FirstOrDefault(b => b.Name == "Iron Katana 1");
 
-                alteredBlade.Name = "Sharp Katana 1";
+                alteredBlade.ElementType = "Fire";
 
                 await controller.Put(alteredBlade.ID, alteredBlade);
 
                 Blade alteredBladedReturned = controller.Blade(alteredBlade.ID)[0];
 
-                Assert.Equal("Sharp Katana 1", alteredBladedReturned.Name);
+                Assert.Equal("Fire", alteredBladedReturned.ElementType);
             }
         }
 

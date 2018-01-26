@@ -119,11 +119,11 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Put(int id, [FromBody]Blade value)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
-            if (!(_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
+            if (!(_context.Blades.Any(b => b.ID == id)))
             {
                 return StatusCode(409);
             }
-
+            value.ID = id;
             _context.Blades.Update(value);
             // Remove prior entries in BladesMaterial for blade being updated:
             // for each name in oldBlade's material list, find ID in BladeMaterial table
