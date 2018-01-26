@@ -97,17 +97,13 @@ namespace XUnitTestAPI
 
                 await controller.Post(mat);
 
-                int MatId = controller.Get().FirstOrDefault<Material>(l => l.Name == "Unobtanium").ID;
+                mat = controller.Get().FirstOrDefault<Material>(l => l.Name == "Unobtanium");
 
-                mat = new Material()
-                {
-                    Name = "Vibranium",
-                    Rarity = 1
-                };
+                mat.Name = "Vibranium";
 
-                await controller.Put(MatId, mat);
+                await controller.Put(mat.ID, mat);
 
-                Material material = controller.GetMaterialBy(MatId)[0];
+                Material material = controller.GetMaterialBy(mat.ID)[0];
 
                 Assert.Equal("Vibranium", material.Name);
 
