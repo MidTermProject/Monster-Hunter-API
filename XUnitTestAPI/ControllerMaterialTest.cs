@@ -323,19 +323,20 @@ namespace XUnitTestAPI
             }
         }
 
-        [Fact]
-        public async void TestDeleteNullBadRequest()
-        {
-            using (HunterDbContext _context = new HunterDbContext(options))
-            {
+
+        //[Fact]
+        //public async void TestDeleteNullBadRequest()
+        //{
+        //    using (HunterDbContext _context = new HunterDbContext(options))
+        //    {
                 
-                await controller.Delete(50);
+        //        await controller.Delete(50);
 
-                int tableCount2 = controller.Get().Count();
+        //        int tableCount2 = controller.Get().Count();
 
-                Assert.Equal(1, tableCount1 - tableCount2);
+        //        Assert.Equal(1, tableCount1 - tableCount2);
 
-            }
-        }
+        //    }
+        //}
     }
 }
