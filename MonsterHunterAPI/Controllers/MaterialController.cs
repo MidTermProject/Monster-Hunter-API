@@ -125,8 +125,9 @@ namespace MonsterHunterAPI.Controllers
 
             // if ID doesn't exist in materials table
             if(!_context.Materials.Any(m => m.ID == id)) return StatusCode(409);
-            
+
             // Update the Material with the new material
+            material.ID = id;
             _context.Materials.Update(material);
 
             // Remove prior rows from material location table to insert the new locations
