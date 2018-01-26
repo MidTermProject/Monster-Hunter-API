@@ -15,7 +15,7 @@ namespace XUnitTestAPI
     {
 
         [Fact]
-        public void GetAllBlades()
+        public void TestGetAllBlades()
         {
             HunterDbContext _context;
 
@@ -48,7 +48,7 @@ namespace XUnitTestAPI
         }
 
         [Fact]
-        public void GetOneBlade()
+        public void TestGetOneBlade()
         {
             HunterDbContext _context;
 
@@ -81,7 +81,7 @@ namespace XUnitTestAPI
         }
 
         [Fact]
-        public void GetFilteredBlades()
+        public void TestGetFilteredBlades()
         {
             HunterDbContext _context;
 
@@ -120,7 +120,40 @@ namespace XUnitTestAPI
         }
 
         [Fact]
-        public async Task CheckBladeMaterialRelationAsync()
+        public async Task TestPostBladeAsync()
+        {
+            HunterDbContext _context;
+
+            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+
+            using (_context = new HunterDbContext(options))
+            {
+                List<Material> testMaterials = GetTestMaterials();
+                foreach (Material x in testMaterials)
+                {
+                    _context.Materials.Add(x);
+                }
+                await _context.SaveChangesAsync();
+
+                // Arrange
+                BladeController controller = new BladeController(_context);
+
+                // Act
+                List<Blade> testBlades = GetTestBlades();
+                foreach (Blade x in testBlades)
+                {
+                    await controller.Post(x);
+                }
+
+                int tableCount = _context.Blades.Count();
+
+                // Assert
+                Assert.Equal(2, tableCount);
+            }
+        }
+
+        [Fact]
+        public async Task TestBladeMaterialRelationAsync()
         {
             HunterDbContext _context;
 
@@ -151,6 +184,80 @@ namespace XUnitTestAPI
                 
                 // Assert
                 Assert.Equal(newBlade.Materials.Count, bladeMaterials.Count);
+            }
+        }
+
+        [Fact]
+        public async Task TestPutBladeAsync()
+        {
+            HunterDbContext _context;
+
+            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+
+            using (_context = new HunterDbContext(options))
+            {
+                List<Material> testMaterials = GetTestMaterials();
+                foreach (Material x in testMaterials)
+                {
+                    _context.Materials.Add(x);
+                }
+                await _context.SaveChangesAsync();
+
+                // Arrange
+                BladeController controller = new BladeController(_context);
+
+                // Act
+                List<Blade> testBlades = GetTestBlades();
+                foreach (Blade x in testBlades)
+                {
+                    await controller.Post(x);
+                }
+
+                Blade alteredBlade = controller.Get().FirstOrDefault(b => b.Name == "Iron Katana 1");
+
+                alteredBlade.Name = "Sharp Katana 1";
+
+                await controller.Put(alteredBlade.ID, alteredBlade);
+
+                Blade alteredBladedReturned = controller.Blade(alteredBlade.ID)[0];
+
+                Assert.Equal("Sharp Katana 1", alteredBladedReturned.Name);
+            }
+        }
+
+        [Fact]
+        public async Task TestDeleteBladeAsync()
+        {
+            HunterDbContext _context;
+
+            DbContextOptions<HunterDbContext> options = new DbContextOptionsBuilder<HunterDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+
+            using (_context = new HunterDbContext(options))
+            {
+                List<Material> testMaterials = GetTestMaterials();
+                foreach (Material x in testMaterials)
+                {
+                    _context.Materials.Add(x);
+                }
+                await _context.SaveChangesAsync();
+
+                // Arrange
+                BladeController controller = new BladeController(_context);
+
+                // Act
+                List<Blade> testBlades = GetTestBlades();
+                foreach (Blade x in testBlades)
+                {
+                    await controller.Post(x);
+                }
+                int tableCount1 = _context.Blades.Count();
+
+                Blade bladeToDelete = controller.Get().FirstOrDefault(b => b.Name == "Iron Katana 1");
+
+                await controller.Delete(bladeToDelete.ID);
+                int tableCount2 = _context.Blades.Count();
+
+                Assert.Equal(1, tableCount1 - tableCount2);
             }
         }
 
