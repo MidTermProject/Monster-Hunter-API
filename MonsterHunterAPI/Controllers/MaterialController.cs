@@ -150,6 +150,7 @@ namespace MonsterHunterAPI.Controllers
                 foreach (var location in material.Locations)
                 {
                     Location relatedLocation = await _context.Locations.FirstOrDefaultAsync(l => l.ID == location.ID);
+                    if(relatedLocation == null) {}
                     MaterialLocation newMaterialLocation = new MaterialLocation();
                     newMaterialLocation.LocationID = relatedLocation.ID;
                     newMaterialLocation.Material = currentMaterial;
