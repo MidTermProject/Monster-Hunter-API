@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using MonsterHunterAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace XUnitTestAPI
 {
@@ -158,9 +159,8 @@ namespace XUnitTestAPI
 
                 var mat = new Material();
 
-                var failResponse = await controller.Post(mat);
-
-                Assert.Equal(1, 4);
+                IActionResult failResponse = await controller.Post(mat);
+                Assert.Equal(201, ((Microsoft.AspNetCore.Mvc.StatusCodeResult)failResponse).StatusCode);
 
             }
         }
@@ -251,12 +251,9 @@ namespace XUnitTestAPI
                 int MatId = controller.Get().FirstOrDefault<Material>(l => l.Name == "Unobtanium").ID;
 
                 mat.Name = null;
-
-                var failResponse = await controller.Put(MatId, mat);
-
-                Material material = controller.GetMaterialBy(MatId)[0];
-
-                Assert.Equal("Vibranium", material.Name);
+                
+                IActionResult failResponse = await controller.Put(mat.ID,mat);
+                Assert.Equal(201, ((Microsoft.AspNetCore.Mvc.StatusCodeResult)failResponse).StatusCode);
 
             }
         }
@@ -318,6 +315,21 @@ namespace XUnitTestAPI
                 int MatId = controller.Get().FirstOrDefault<Material>(l => l.Name == "Unobtanium").ID;
 
                 await controller.Delete(MatId);
+
+                int tableCount2 = controller.Get().Count();
+
+                Assert.Equal(1, tableCount1 - tableCount2);
+
+            }
+        }
+
+        [Fact]
+        public async void TestDeleteNullBadRequest()
+        {
+            using (HunterDbContext _context = new HunterDbContext(options))
+            {
+                
+                await controller.Delete(50);
 
                 int tableCount2 = controller.Get().Count();
 
