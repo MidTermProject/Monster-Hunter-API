@@ -35,6 +35,7 @@ namespace MonsterHunterAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // checking if location exists in the database
             if (!_context.Locations.Any(l => l.Name == location.Name))
             {
                 await _context.Locations.AddAsync(location);
@@ -55,6 +56,7 @@ namespace MonsterHunterAPI.Controllers
 
             if (result != null)
             {
+                // setting new properties to update Location
                 result.Name = location.Name;
                 result.Area = location.Area;
                 result.DropRate = location.DropRate;

@@ -119,25 +119,32 @@ namespace MonsterHunterAPI.Controllers
         public async Task<IActionResult> Put(int id, [FromBody]Blade value)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            // checking if the blade exists in the database
             if (!(_context.Blades.Any(b => b.Name.ToLower() == value.Name.ToLower())))
             {
                 return StatusCode(409);
             }
 
             _context.Blades.Update(value);
+
             // Remove prior entries in BladesMaterial for blade being updated:
             // for each name in oldBlade's material list, find ID in BladeMaterial table
             List<BladeMaterial> oldBladeMaterials = _context.BladesMaterials.Where(y => y.Blade.ID == id).ToList();
+
             foreach (var x in oldBladeMaterials)
             {
                 _context.BladesMaterials.Remove(x);
             }
             await _context.SaveChangesAsync();
+
             // Parse materials and quantities as list of strings, to update BladeMaterial table
             // Get blade from table
             Blade newBlade = _context.Blades.FirstOrDefault(b => b.ID == id);
+
             // Create new instance of blade material pairing
             BladeMaterial newBMrelation = new BladeMaterial();
+
             // used to store name and quantity for .Split in foreach loop
             if(value.Materials != null)
             {
@@ -148,11 +155,14 @@ namespace MonsterHunterAPI.Controllers
                     values = s.Split(':');
                     // Get Material instance that matches name in current string in Blade's list of materials
                     Material relatedMaterial = _context.Materials.FirstOrDefault(x => x.Name == values[0]);
+
                     // Save Blade ID, Material ID, and Quantity to relation instance
-                    newBMrelation = new BladeMaterial();
-                    newBMrelation.Blade = newBlade;
-                    newBMrelation.MaterialID = relatedMaterial.ID;
-                    newBMrelation.Quantity = Int32.Parse(values[1]);
+                    newBMrelation = new BladeMaterial
+                    {
+                        Blade = newBlade,
+                        MaterialID = relatedMaterial.ID,
+                        Quantity = Int32.Parse(values[1])
+                    };
                     // add new row to BladeMaterial table
                     await _context.BladesMaterials.AddAsync(newBMrelation);
                 }

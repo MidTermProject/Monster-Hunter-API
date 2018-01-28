@@ -46,21 +46,37 @@ Update-Database
 ### API Deployed on Azure
 ** http://monsterhunterapi.azurewebsites.net/ **
 
+![All End Points](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.jpg?raw=true "MonsterHunter")
+
+
 ### Blades
 
 Getting all Blades from the Database
 
-`/api/blade/`
+`GET: /api/blade/`
 
 Getting a single Blade by ID. This endpoint will return a list of materials in the returned Blade object
 
-`/api/blade/:bladeId`
+`GET: /api/blade/:bladeId`
 
 Filtering list of blades by Weapon Or/And Element Or/And Rarity
 
-`/api/blade/:weaponClass/:element/:rarity`
+`GET: /api/blade/:weaponClass/:element/:rarity`
 
-#### Json-Fromatted Example
+Post/Create a new Weapon/Blade on the Database
+
+`POST: api/blade`
+
+Update a blade/weapon
+
+`PUT: api/blade/:id`
+
+Delete a blade from the database
+
+`DELETE api/blade/:id`
+
+
+#### Blade JSON-formatted Example
 ```
 [
     {
