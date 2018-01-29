@@ -149,15 +149,23 @@ namespace MonsterHunterAPI.Controllers
             {
                 foreach (var location in material.Locations)
                 {
+                    // Getting single location related to the material
                     Location relatedLocation = await _context.Locations.FirstOrDefaultAsync(l => l.ID == location.ID);
                     if(relatedLocation == null) {}
-                    MaterialLocation newMaterialLocation = new MaterialLocation();
-                    newMaterialLocation.LocationID = relatedLocation.ID;
-                    newMaterialLocation.Material = currentMaterial;
-                    newMaterialLocation.Action = location.Action;
-                    newMaterialLocation.DropRate = location.DropRate;
 
-                    await _context.MaterialsLocations.AddAsync(newMaterialLocation);
+                    // Creating new material location with new data to update it in the Material Location DB Table
+                    if (relatedLocation != null)
+                    {
+                        MaterialLocation newMaterialLocation = new MaterialLocation
+                        {
+                            LocationID = relatedLocation.ID,
+                            Material = currentMaterial,
+                            Action = location.Action,
+                            DropRate = location.DropRate
+                        };
+
+                        await _context.MaterialsLocations.AddAsync(newMaterialLocation);
+                    }
                 }
             }
             await _context.SaveChangesAsync();
@@ -165,7 +173,7 @@ namespace MonsterHunterAPI.Controllers
             return Ok();
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/material/:id
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -173,6 +181,7 @@ namespace MonsterHunterAPI.Controllers
             if (!(await _context.Materials.AnyAsync(x => x.ID == id)))
                 return BadRequest();
 
+            // Finding material locaiton entity related to material requested to be deleted
             List<MaterialLocation> matchedMatLocs = _context.MaterialsLocations.Where(current => current.Material.ID == id).ToList();
 
             if (matchedMatLocs.Count > 0)
@@ -183,8 +192,12 @@ namespace MonsterHunterAPI.Controllers
                 }
             }
 
+            // getting Material by Id
             Material materialToRemove = _context.Materials.FirstOrDefault(current => current.ID == id);
-            _context.Materials.Remove(materialToRemove);
+
+            // Revming the material if it exists in the database
+            if(materialToRemove != null) _context.Materials.Remove(materialToRemove);
+
             await _context.SaveChangesAsync();
 
             return Ok();

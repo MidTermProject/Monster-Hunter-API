@@ -7,61 +7,84 @@
 An API created from scratch used to request and modify a database of blademaster weapons for the game Monster Hunter Generations with CRUD routes.
 
 ## Getting Started
-The following is required to run the program locally.
-1. [Visual Studio 2017 Community with .NET Core 2.0 SDK](https://www.microsoft.com/net/core#windowscmd)
-2. The .NET desktop development workload enabled
-3. Ensure appsettings.json connection string is set to:
+The following are required to run the program locally.
+- [Visual Studio 2017 Community with .NET Core 2.0 SDK](https://www.microsoft.com/net/core#windowscmd)
+- [GitBash / Terminal](https://git-scm.com/downloads) or [GitHub Extension for Visual Studio](https://visualstudio.github.com)
+
+1. Clone the repository to your local machine.
+2. Cd into the application directory where the `MonsterHunterAPI.sln` exist.
+3. Open the application using `Open/Start MonsterHunterAPI.sln`.
+4) Once the App is opened, Right click on the application name from the `Solution Explorer Window` and select `Add` -> `New Item` -> find `ASP.NET Configuration File` and open add it to the project.
+- Inside this file, change the following Connection String to the database
+```css
+"ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TaskDB;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
 ```
+
+5) Click `Tools` -> `NuGet Package Manager` -> `Package Manager Console` then run the following commands in the console.
+```css
 Install-Package Microsoft.EntityFrameworkCore.Tools
 Add-Migration Initial
 Update-Database
 ```
-
-## Default Connection String to Database if used Locally
-```
-"ConnectionStrings": {
-
-    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TaskDB;Trusted_Connection=True;MultipleActiveResultSets=true"
-```
-
-4. Install Entity Framework, and build database with the following commands in the Package Manager Console:
-
-### The main models/databases are:-
-- Blade
-- BladeMaterial (Intermediary DBSet)
-- Material
-- MaterialLocation (Intermediary DBSet)
-- Location
-
-### The main controllers are:-
-- Blade Controller
-- Material Controller
-- Location Controller
+6. Once the database is updated, you can Run the application by clicking on the Play button <img src="https://github.com/luayyounus/Lab02-Unit-Testing/blob/Lab02-Luay/WarCardGame/play-button.jpg" width="16">.
 
 ## Database Diagram
 ![DatabaseSchema](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.jpg?raw=true "MonsterHunter")
 
 # API Endpoints
 
-### API Deployed on Azure
-** http://monsterhunterapi.azurewebsites.net/ **
+##### Link to deployment on Azure
 
-### Blades
+[![APIEndPointBlade](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/azure-logo.png?raw=true) ](http://monsterhunterapi.azurewebsites.net/api/blade)
+
+##### All End Points / Routes
+
+![All End Points](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/API-Swagger.png?raw=true "API")
+
+
+## Blades 
 
 Getting all Blades from the Database
 
-`/api/blade/`
+```yaml
+GET: /api/blade/
+```
 
 Getting a single Blade by ID. This endpoint will return a list of materials in the returned Blade object
 
-`/api/blade/:bladeId`
+```yaml
+GET: /api/blade/:bladeId
+```
 
 Filtering list of blades by Weapon Or/And Element Or/And Rarity
 
-`/api/blade/:weaponClass/:element/:rarity`
-
-#### Json-Fromatted Example
+```yaml
+GET: /api/blade/:weaponClass/:element/:rarity
 ```
+
+Post/Create a new Weapon/Blade on the Database
+
+```yaml
+POST: api/blade
+```
+
+Update a blade/weapon
+
+```yaml
+PUT: api/blade/:id
+```
+
+Delete a blade from the database
+
+```yaml
+DELETE: api/blade/:id
+```
+
+
+#### Blade JSON Example
+```json
 [
     {
         "id": 1,
@@ -105,23 +128,29 @@ Filtering list of blades by Weapon Or/And Element Or/And Rarity
 ]
 ```
 
-### Materials
+## Materials
 
 Getting all materials from Database
 
-`GET /api/material`
+```yaml
+GET: /api/material
+```
 
 Getting one material by ID
 
-`GET /api/material/:id`
+```yaml
+GET: /api/material/:id
+```
 
 Posting a material with a list of locations
 
-`POST /api/material`
-
-
-#### Json-Fromatted Example
+```yaml
+POST: /api/material
 ```
+
+
+#### Material Json Example
+```json
 [
     {
         "id": 1,
@@ -154,30 +183,43 @@ Posting a material with a list of locations
 ]
 ```
 
-### Locations
+## Locations
 
 Getting All Locations from Database
 
-`/api/location`
+```yaml
+GET: /api/location
+```
 
 Getting one Location by ID
 
-`/api/:locationId`
+```yaml
+GET: /api/:locationId
+```
 
 Creating a new Location
 
-`api/Location` A location object requires properties of `Name` and `Area`
+A location object requires properties of `Name` and `Area`
+
+
+```yaml
+POST: api/Location
+```
 
 Update an existing Location
 
-`api/Location/:id` and the location object inclduing `name` and `area`
+```yaml
+PUT: api/Location/:id
+````
 
 Delete a location
 
-`api/Location/:id`
-
-#### Json-Fromatted Example
+```yaml
+DELETE: api/Location/:id
 ```
+
+#### Locations JSON Example
+```json
 [
     {
         "id": 1,
@@ -196,6 +238,11 @@ Delete a location
 ]
 ```
 
-## Specs
-- C# ASP.NET Core MVC Application
-- Entity Framework 2.0
+### Frameworks & Dependencies
+- Entity Framework Core
+- ASP.NET Core
+- Swashbuckle
+- Xunit
+
+## Architecture
+C# ASP.NET Core MVC Application
