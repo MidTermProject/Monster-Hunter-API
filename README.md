@@ -1,4 +1,4 @@
-# Monster App 
+# Monster Hunter API
 -----
 **Authors**: Ariel R. Pedraza, Luay Younus, Dustin Mundy<br />
 **Version**: 1.0.0
@@ -15,7 +15,7 @@ The following are required to run the program locally.
 2. Cd into the application directory where the `MonsterHunterAPI.sln` exist.
 3. Open the application using `Open/Start MonsterHunterAPI.sln`.
 4) Once the App is opened, Right click on the application name from the `Solution Explorer Window` and select `Add` -> `New Item` -> find `ASP.NET Configuration File` and open add it to the project.
-- Inside this file, change the following Connection String to the database
+- Inside this file, change the Connection String to the following to connect to database
 ```css
 "ConnectionStrings": {
     "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TaskDB;Trusted_Connection=True;MultipleActiveResultSets=true"
@@ -24,27 +24,27 @@ The following are required to run the program locally.
 
 5) Click `Tools` -> `NuGet Package Manager` -> `Package Manager Console` then run the following commands in the console.
 ```css
-Install-Package Microsoft.EntityFrameworkCore.Tools
-Add-Migration Initial
-Update-Database
+- Install-Package Microsoft.EntityFrameworkCore.Tools
+- Add-Migration Initial
+- Update-Database
 ```
 6. Once the database is updated, you can Run the application by clicking on the Play button <img src="https://github.com/luayyounus/Lab02-Unit-Testing/blob/Lab02-Luay/WarCardGame/play-button.jpg" width="16">.
 
-## Database Diagram
+## Database Schema
 ![DatabaseSchema](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/MonsterHunterDBSchema.jpg?raw=true "MonsterHunter")
 
 # API Endpoints
 
-##### Link to deployment on Azure
+#### Link to deployment on Azure
 
 [![APIEndPointBlade](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/azure-logo.png?raw=true) ](http://monsterhunterapi.azurewebsites.net/api/blade)
 
-##### All End Points / Routes
+#### Link to Swagger API Documentation
 
-![All End Points](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/API-Swagger.png?raw=true "API")
+[![APIEndPointSwagger](https://raw.githubusercontent.com/MidTermProject/Monster-Hunter-API/master/Resources/swagger-logo.jpeg?raw=true) ](http://monsterhunterapi.azurewebsites.net/swagger/)
 
 
-## Blades 
+## Weapons/Blades 
 
 Getting all Blades from the Database
 
